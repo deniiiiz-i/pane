@@ -1,0 +1,17 @@
+{
+  "name": "pane",
+  "private": true,
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "registry:build": "turbo run registry:build"
+  },
+  "devDependencies": {
+    "turbo": "^2.10.3"
+  },
+  "packageManager": "pnpm@10.15.1",
+  "engines": {
+    "node": ">=20"
+  }
+}

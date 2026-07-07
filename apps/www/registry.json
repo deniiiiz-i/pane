@@ -1,0 +1,305 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "pane",
+  "homepage": "https://pane.theui.company",
+  "items": [
+    {
+      "name": "pane-style",
+      "type": "registry:style",
+      "dependencies": [
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge",
+        "motion",
+        "lucide-react"
+      ],
+      "devDependencies": ["tw-animate-css"],
+      "cssVars": {
+        "light": {
+          "pane-blur-regular": "20px",
+          "pane-blur-clear": "14px",
+          "pane-saturation": "1.9",
+          "pane-tint-regular": "rgba(255, 255, 255, 0.45)",
+          "pane-tint-clear": "rgba(255, 255, 255, 0.16)",
+          "pane-border-regular": "rgba(255, 255, 255, 0.85)",
+          "pane-border-clear": "rgba(255, 255, 255, 0.6)",
+          "pane-highlight": "rgba(255, 255, 255, 0.85)",
+          "pane-shadow": "rgba(0, 0, 0, 0.1)"
+        },
+        "dark": {
+          "pane-tint-regular": "rgba(30, 30, 34, 0.45)",
+          "pane-tint-clear": "rgba(20, 20, 24, 0.22)",
+          "pane-border-regular": "rgba(255, 255, 255, 0.14)",
+          "pane-border-clear": "rgba(255, 255, 255, 0.1)",
+          "pane-highlight": "rgba(255, 255, 255, 0.22)",
+          "pane-shadow": "rgba(0, 0, 0, 0.5)"
+        }
+      },
+      "files": []
+    },
+    {
+      "name": "utils",
+      "type": "registry:lib",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        { "path": "registry/pane/lib/utils.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "name": "glass-core",
+      "type": "registry:lib",
+      "dependencies": ["class-variance-authority"],
+      "files": [
+        { "path": "registry/pane/lib/glass/types.ts", "type": "registry:lib" },
+        { "path": "registry/pane/lib/glass/config.ts", "type": "registry:lib" },
+        {
+          "path": "registry/pane/lib/glass/displacement.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/pane/lib/glass/glass-filter.tsx",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/pane/lib/glass/variants.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "use-glass-pointer",
+      "type": "registry:hook",
+      "dependencies": ["motion"],
+      "registryDependencies": ["@pane/glass-core"],
+      "files": [
+        {
+          "path": "registry/pane/hooks/use-glass-pointer.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "use-glass-support",
+      "type": "registry:hook",
+      "registryDependencies": ["@pane/glass-core"],
+      "files": [
+        {
+          "path": "registry/pane/hooks/use-glass-support.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "pane",
+      "type": "registry:ui",
+      "dependencies": ["motion"],
+      "registryDependencies": [
+        "@pane/pane-style",
+        "@pane/utils",
+        "@pane/glass-core",
+        "@pane/use-glass-pointer",
+        "@pane/use-glass-support"
+      ],
+      "files": [{ "path": "registry/pane/ui/pane.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "dependencies": ["class-variance-authority", "radix-ui"],
+      "registryDependencies": ["@pane/pane", "@pane/utils"],
+      "files": [
+        { "path": "registry/pane/ui/button.tsx", "type": "registry:ui" }
+      ]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "registryDependencies": ["@pane/pane", "@pane/utils"],
+      "files": [{ "path": "registry/pane/ui/card.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "dependencies": ["class-variance-authority", "radix-ui"],
+      "registryDependencies": ["@pane/pane", "@pane/utils"],
+      "files": [{ "path": "registry/pane/ui/badge.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "registryDependencies": ["@pane/pane", "@pane/utils"],
+      "files": [{ "path": "registry/pane/ui/input.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "dependencies": ["radix-ui", "motion"],
+      "registryDependencies": ["@pane/pane", "@pane/utils"],
+      "files": [
+        { "path": "registry/pane/ui/switch.tsx", "type": "registry:ui" }
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "dependencies": ["radix-ui", "motion"],
+      "registryDependencies": ["@pane/pane", "@pane/utils"],
+      "files": [{ "path": "registry/pane/ui/tabs.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "dependencies": ["radix-ui"],
+      "registryDependencies": ["@pane/pane", "@pane/utils"],
+      "files": [
+        { "path": "registry/pane/ui/tooltip.tsx", "type": "registry:ui" }
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "dependencies": ["radix-ui", "lucide-react"],
+      "registryDependencies": ["@pane/pane", "@pane/utils"],
+      "files": [
+        { "path": "registry/pane/ui/dialog.tsx", "type": "registry:ui" }
+      ]
+    },
+    {
+      "name": "sheet",
+      "type": "registry:ui",
+      "dependencies": ["radix-ui", "lucide-react", "class-variance-authority"],
+      "registryDependencies": ["@pane/pane", "@pane/utils"],
+      "files": [{ "path": "registry/pane/ui/sheet.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "navbar",
+      "type": "registry:ui",
+      "dependencies": ["motion"],
+      "registryDependencies": ["@pane/pane", "@pane/utils"],
+      "files": [
+        { "path": "registry/pane/ui/navbar.tsx", "type": "registry:ui" }
+      ]
+    },
+    {
+      "name": "pane-demo",
+      "type": "registry:example",
+      "registryDependencies": ["@pane/pane"],
+      "files": [
+        {
+          "path": "registry/pane/examples/pane-demo.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-demo",
+      "type": "registry:example",
+      "registryDependencies": ["@pane/button"],
+      "files": [
+        {
+          "path": "registry/pane/examples/button-demo.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "card-demo",
+      "type": "registry:example",
+      "registryDependencies": ["@pane/card", "@pane/button"],
+      "files": [
+        {
+          "path": "registry/pane/examples/card-demo.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "badge-demo",
+      "type": "registry:example",
+      "registryDependencies": ["@pane/badge"],
+      "files": [
+        {
+          "path": "registry/pane/examples/badge-demo.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-demo",
+      "type": "registry:example",
+      "registryDependencies": ["@pane/input"],
+      "files": [
+        {
+          "path": "registry/pane/examples/input-demo.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "switch-demo",
+      "type": "registry:example",
+      "registryDependencies": ["@pane/switch"],
+      "files": [
+        {
+          "path": "registry/pane/examples/switch-demo.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tabs-demo",
+      "type": "registry:example",
+      "registryDependencies": ["@pane/tabs"],
+      "files": [
+        {
+          "path": "registry/pane/examples/tabs-demo.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tooltip-demo",
+      "type": "registry:example",
+      "registryDependencies": ["@pane/tooltip", "@pane/button"],
+      "files": [
+        {
+          "path": "registry/pane/examples/tooltip-demo.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "dialog-demo",
+      "type": "registry:example",
+      "registryDependencies": ["@pane/dialog", "@pane/button"],
+      "files": [
+        {
+          "path": "registry/pane/examples/dialog-demo.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "sheet-demo",
+      "type": "registry:example",
+      "registryDependencies": ["@pane/sheet", "@pane/button"],
+      "files": [
+        {
+          "path": "registry/pane/examples/sheet-demo.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "navbar-demo",
+      "type": "registry:example",
+      "registryDependencies": ["@pane/navbar"],
+      "files": [
+        {
+          "path": "registry/pane/examples/navbar-demo.tsx",
+          "type": "registry:example"
+        }
+      ]
+    }
+  ]
+}
