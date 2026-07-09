@@ -1,14 +1,9 @@
-import {
-  CompassIcon,
-  HeartIcon,
-  HomeIcon,
-  SearchIcon,
-  UserIcon,
-} from "lucide-react";
-import Image from "next/image";
+import { ArrowRightIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import { InstallCommand } from "@/components/install-command";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,17 +12,57 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Navbar } from "@/components/ui/navbar";
+import { Input } from "@/components/ui/input";
 import { Pane } from "@/components/ui/pane";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { componentsMeta } from "@/lib/components-meta";
+import NavbarDemo from "@/registry/pane/examples/navbar-demo";
+
+function SectionHeader({ title, sub }: { title: string; sub: string }) {
+  return (
+    <div className="flex max-w-xl flex-col items-center gap-3 text-center">
+      <h2 className="text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
+        {title}
+      </h2>
+      <p className="text-balance text-muted-foreground">{sub}</p>
+    </div>
+  );
+}
+
+function ShowcaseCell({
+  title,
+  href,
+  children,
+}: {
+  title: string;
+  href: string;
+  children: ReactNode;
+}) {
+  return (
+    <Pane radius={28} className="flex flex-col gap-5 p-6">
+      <Link
+        href={href}
+        className="group flex items-center justify-between text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+      >
+        {title}
+        <ArrowRightIcon className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
+      </Link>
+      <div className="flex min-h-28 flex-1 items-center justify-center">
+        {children}
+      </div>
+    </Pane>
+  );
+}
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main className="flex flex-1 flex-col items-center gap-16 px-4 pt-12 pb-24 sm:gap-24 sm:pt-20 sm:pb-32">
+      <main className="flex flex-1 flex-col items-center gap-20 px-4 pt-12 pb-24 sm:gap-28 sm:pt-20 sm:pb-32">
         <section className="flex max-w-2xl flex-col items-center gap-6 text-center">
-          <Badge variant="tinted">Copy-paste. No npm install.</Badge>
+          <Badge>Copy-paste. No npm install.</Badge>
           <h1 className="text-5xl font-semibold tracking-tight text-balance sm:text-6xl">
             Liquid glass, for React.
           </h1>
@@ -36,77 +71,124 @@ export default function Home() {
             material — real refraction, pointer-reactive light, spring physics.
             Install with the shadcn CLI or copy the code.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="flex flex-col items-center gap-3 sm:flex-row">
             <Button size="lg" asChild>
               <Link href="/docs">Get started</Link>
             </Button>
-            <Button size="lg" asChild>
-              <Link href="/docs/installation">npx shadcn add</Link>
-            </Button>
+            <InstallCommand />
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {componentsMeta.length} components · MIT licensed · React 19 +
+            Tailwind v4
+          </p>
+        </section>
+
+        <section className="flex w-full max-w-5xl flex-col items-center gap-10">
+          <SectionHeader
+            title="One material, every component"
+            sub="Everything is built on a single <Pane> primitive, so buttons, inputs and dialogs refract, tint and respond as one surface. Try them — they're live."
+          />
+          <div className="grid w-full gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <ShowcaseCell title="Button" href="/docs/components/button">
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Button>Continue</Button>
+                <Button variant="destructive">Delete</Button>
+                <Button size="icon" aria-label="Add">
+                  <PlusIcon />
+                </Button>
+              </div>
+            </ShowcaseCell>
+            <ShowcaseCell title="Tabs" href="/docs/components/tabs">
+              <Tabs defaultValue="music" className="w-full items-center">
+                <TabsList>
+                  <TabsTrigger value="music">Music</TabsTrigger>
+                  <TabsTrigger value="photos">Photos</TabsTrigger>
+                  <TabsTrigger value="files">Files</TabsTrigger>
+                </TabsList>
+                <TabsContent
+                  value="music"
+                  className="text-center text-sm text-muted-foreground"
+                >
+                  Your library, synced across every device.
+                </TabsContent>
+                <TabsContent
+                  value="photos"
+                  className="text-center text-sm text-muted-foreground"
+                >
+                  Every photo, organized automatically.
+                </TabsContent>
+                <TabsContent
+                  value="files"
+                  className="text-center text-sm text-muted-foreground"
+                >
+                  Documents that stay out of the way.
+                </TabsContent>
+              </Tabs>
+            </ShowcaseCell>
+            <ShowcaseCell title="Input" href="/docs/components/input">
+              <div className="flex w-full max-w-xs flex-col gap-3">
+                <Input type="email" placeholder="Email address" />
+                <Input type="password" placeholder="Password" />
+              </div>
+            </ShowcaseCell>
+            <ShowcaseCell title="Switch" href="/docs/components/switch">
+              <div className="flex items-center gap-3">
+                <Switch id="home-airplane-mode" defaultChecked />
+                <label
+                  htmlFor="home-airplane-mode"
+                  className="text-sm font-medium"
+                >
+                  Airplane mode
+                </label>
+              </div>
+            </ShowcaseCell>
+            <ShowcaseCell title="Badge" href="/docs/components/badge">
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                <Badge>New</Badge>
+                <Badge variant="tinted">Pro</Badge>
+                <Badge>v1.0</Badge>
+              </div>
+            </ShowcaseCell>
+            <ShowcaseCell title="Card" href="/docs/components/card">
+              <Card radius={20} className="w-full max-w-xs gap-0 py-4">
+                <CardHeader className="px-4">
+                  <CardTitle className="text-sm">Weekly report</CardTitle>
+                  <CardDescription>
+                    Ready to review and share with the team.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </ShowcaseCell>
           </div>
         </section>
 
-        <section className="w-full max-w-4xl">
-          <Pane
-            variant="clear"
-            radius={40}
-            className="flex flex-col items-center gap-6 px-5 py-10 sm:px-16 sm:py-16"
-          >
-            <Image
-              src="/pane.png"
-              alt="Pane"
-              width={72}
-              height={72}
-              className="rounded-2xl"
-              priority
-            />
-            <p className="max-w-md text-center text-muted-foreground">
-              Every component — buttons, cards, dialogs, the dock below — is
-              built on one primitive,{" "}
-              <span className="font-medium text-foreground">{"<Pane>"}</span>,
-              so the whole library looks and behaves like a single material.
-            </p>
-            <Navbar
-              defaultValue="Home"
-              items={[
-                { label: "Home", icon: <HomeIcon /> },
-                { label: "Search", icon: <SearchIcon /> },
-                { label: "Explore", icon: <CompassIcon /> },
-                { label: "Favorites", icon: <HeartIcon /> },
-                { label: "Profile", icon: <UserIcon /> },
-              ]}
-            />
-          </Pane>
-        </section>
-
-        <section className="grid w-full max-w-4xl gap-4 sm:grid-cols-3">
-          <Card radius={22} className="py-5">
-            <CardHeader className="px-5">
-              <CardTitle className="text-base">Own the code</CardTitle>
-              <CardDescription>
-                Every file is copied into your repo. Read it, change it, ship
-                it.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-          <Card radius={22} className="py-5">
-            <CardHeader className="px-5">
-              <CardTitle className="text-base">Real refraction</CardTitle>
-              <CardDescription>
-                An SVG displacement filter bends the background at the edges,
-                not just blur.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-          <Card radius={22} className="py-5">
-            <CardHeader className="px-5">
-              <CardTitle className="text-base">One tuning dial</CardTitle>
-              <CardDescription>
-                Blur, tint, lensing and spring physics all live in one config
-                file.
-              </CardDescription>
-            </CardHeader>
-          </Card>
+        <section className="flex w-full max-w-5xl flex-col items-center gap-10">
+          <SectionHeader
+            title="Everything in the registry"
+            sub="Each component page has a live preview, the full source to copy, and a one-line install command."
+          />
+          <div className="grid w-full gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {componentsMeta.map((component) => (
+              <Link
+                key={component.slug}
+                href={`/docs/components/${component.slug}`}
+              >
+                <Card
+                  radius={22}
+                  interactive
+                  className="h-full py-5 transition-colors"
+                >
+                  <CardHeader className="px-5">
+                    <CardTitle className="flex items-center justify-between text-base">
+                      {component.title}
+                      <ArrowRightIcon className="size-4 text-muted-foreground" />
+                    </CardTitle>
+                    <CardDescription>{component.description}</CardDescription>
+                  </CardHeader>
+                </Card>
+              </Link>
+            ))}
+          </div>
         </section>
       </main>
 

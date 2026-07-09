@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { DocsPager } from "@/components/docs/docs-pager";
+import { Toc } from "@/components/docs/toc";
 import { docsNav } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
@@ -46,6 +47,11 @@ export function DocsShell({ children }: { children: ReactNode }) {
         {children}
         <DocsPager />
       </main>
+      <aside className="hidden w-48 shrink-0 xl:block">
+        <div className="sticky top-24">
+          <Toc key={pathname} />
+        </div>
+      </aside>
     </div>
   );
 }
