@@ -4,7 +4,6 @@ import ButtonDemo from "@/registry/pane/examples/button-demo";
 import CardDemo from "@/registry/pane/examples/card-demo";
 import DialogDemo from "@/registry/pane/examples/dialog-demo";
 import InputDemo from "@/registry/pane/examples/input-demo";
-import NavbarDemo from "@/registry/pane/examples/navbar-demo";
 import PaneDemo from "@/registry/pane/examples/pane-demo";
 import SheetDemo from "@/registry/pane/examples/sheet-demo";
 import SwitchDemo from "@/registry/pane/examples/switch-demo";
@@ -139,13 +138,6 @@ export const componentsMeta: ComponentMeta[] = [
     description: "A directional slide-over glass panel.",
     registryName: "sheet",
     demo: SheetDemo,
-  },
-  {
-    slug: "navbar",
-    title: "Navbar",
-    description: "A floating glass dock — the classic liquid-glass showcase.",
-    registryName: "navbar",
-    demo: NavbarDemo,
   },
 ];
 

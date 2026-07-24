@@ -39,7 +39,6 @@ export const docsNav: { title: string; items: NavItem[] }[] = [
       { title: "Tooltip", href: "/docs/components/tooltip" },
       { title: "Dialog", href: "/docs/components/dialog" },
       { title: "Sheet", href: "/docs/components/sheet" },
-      { title: "Navbar", href: "/docs/components/navbar" },
     ],
   },
 ];

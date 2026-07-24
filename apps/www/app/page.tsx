@@ -17,7 +17,6 @@ import { Pane } from "@/components/ui/pane";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { componentsMeta } from "@/lib/components-meta";
-import NavbarDemo from "@/registry/pane/examples/navbar-demo";
 
 function SectionHeader({ title, sub }: { title: string; sub: string }) {
   return (

@@ -8,7 +8,7 @@ export function Footer() {
         rel="noreferrer"
         className="font-medium text-foreground underline underline-offset-4"
       >
-        Uniform Interface Company
+        Uniform Interface
       </a>
       .
     </footer>

@@ -172,15 +172,6 @@
       "files": [{ "path": "registry/pane/ui/sheet.tsx", "type": "registry:ui" }]
     },
     {
-      "name": "navbar",
-      "type": "registry:ui",
-      "dependencies": ["motion"],
-      "registryDependencies": ["@pane/pane", "@pane/utils"],
-      "files": [
-        { "path": "registry/pane/ui/navbar.tsx", "type": "registry:ui" }
-      ]
-    },
-    {
       "name": "pane-demo",
       "type": "registry:example",
       "registryDependencies": ["@pane/pane"],
@@ -286,17 +277,6 @@
       "files": [
         {
           "path": "registry/pane/examples/sheet-demo.tsx",
-          "type": "registry:example"
-        }
-      ]
-    },
-    {
-      "name": "navbar-demo",
-      "type": "registry:example",
-      "registryDependencies": ["@pane/navbar"],
-      "files": [
-        {
-          "path": "registry/pane/examples/navbar-demo.tsx",
           "type": "registry:example"
         }
       ]
