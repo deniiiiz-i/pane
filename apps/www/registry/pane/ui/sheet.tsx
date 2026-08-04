@@ -72,7 +72,7 @@ function SheetContent({
         {...props}
       >
         <Pane
-          variant="clear"
+          variant="regular"
           radius={26}
           className="flex h-full w-full flex-col gap-5 p-6"
         >

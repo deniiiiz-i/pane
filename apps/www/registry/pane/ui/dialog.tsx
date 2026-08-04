@@ -59,7 +59,7 @@ function DialogContent({
         )}
         {...props}
       >
-        <Pane variant="clear" radius={28} className="grid gap-5 p-6">
+        <Pane variant="regular" radius={28} className="grid gap-5 p-6">
           {children}
           {showCloseButton ? (
             <Pane
