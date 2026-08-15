@@ -39,8 +39,10 @@ export default function ThemingPage() {
           code={`:root {
   --pane-blur-regular: 20px;
   --pane-blur-clear: 14px;
-  --pane-saturation: 1.9;
+  --pane-saturation: 1.45;
   --pane-tint-regular: rgba(255, 255, 255, 0.45);
+  --pane-nested-regular: rgba(255, 255, 255, 0.55);
+  --pane-border-width: 0.5px;
   --pane-border-regular: rgba(255, 255, 255, 0.85);
   --pane-highlight: rgba(255, 255, 255, 0.85);
   --pane-shadow: rgba(0, 0, 0, 0.1);

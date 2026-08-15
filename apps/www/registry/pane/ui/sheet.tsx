@@ -81,7 +81,7 @@ function SheetContent({
             variant="clear"
             interactive
             radius={999}
-            className="absolute top-4 right-4 inline-flex focus-within:ring-2 focus-within:ring-[var(--pane-highlight)]"
+            className="absolute top-4 right-4 inline-flex has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--pane-highlight)]"
           >
             <SheetPrimitive.Close className="flex size-8 items-center justify-center bg-transparent text-muted-foreground outline-none transition-colors hover:text-foreground">
               <XIcon className="size-4" />

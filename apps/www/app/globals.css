@@ -12,15 +12,30 @@
      registry/pane/lib/glass/config.ts. Keep both in sync when tuning. */
   --pane-fg: var(--foreground);
 
-  --pane-blur-regular: 20px;
-  --pane-blur-clear: 14px;
-  --pane-saturation: 1.9;
+  /* Blur past ~12px with a tint past ~0.3 tips over into opaque plastic and
+     leaves the refraction nothing to refract. */
+  --pane-blur-regular: 12px;
+  --pane-blur-clear: 5px;
+  --pane-saturation: 1.7;
 
-  --pane-tint-regular: rgba(255, 255, 255, 0.45);
-  --pane-tint-clear: rgba(255, 255, 255, 0.16);
+  --pane-tint-regular: rgba(255, 255, 255, 0.26);
+  --pane-tint-clear: rgba(255, 255, 255, 0.08);
 
+  /* glass on glass: a Pane inside a Pane can't blur anything new, so it swaps
+     its backdrop for these flat translucent layers instead */
+  --pane-nested-regular: rgba(255, 255, 255, 0.4);
+  --pane-nested-clear: rgba(255, 255, 255, 0.2);
+
+  --pane-border-width: 0.5px;
   --pane-border-regular: rgba(255, 255, 255, 0.85);
   --pane-border-clear: rgba(255, 255, 255, 0.6);
+
+  /* accent — system green for controls in their "on" state, kept translucent
+     so the material still refracts what sits behind it */
+  --pane-tint-accent: rgba(52, 199, 89, 0.82);
+  --pane-border-accent: rgba(255, 255, 255, 0.7);
+  /* near-solid: the switch thumb has to stay readable over the green fill */
+  --pane-knob: rgba(255, 255, 255, 0.92);
 
   --pane-highlight: rgba(255, 255, 255, 0.85);
   --pane-shadow: rgba(0, 0, 0, 0.1);
@@ -31,11 +46,18 @@
   --foreground: #f5f5f7;
   --muted-foreground: #98989d;
 
-  --pane-tint-regular: rgba(30, 30, 34, 0.45);
-  --pane-tint-clear: rgba(20, 20, 24, 0.22);
+  --pane-tint-regular: rgba(28, 28, 32, 0.3);
+  --pane-tint-clear: rgba(18, 18, 22, 0.12);
+
+  --pane-nested-regular: rgba(255, 255, 255, 0.12);
+  --pane-nested-clear: rgba(255, 255, 255, 0.07);
 
   --pane-border-regular: rgba(255, 255, 255, 0.14);
   --pane-border-clear: rgba(255, 255, 255, 0.1);
+
+  --pane-tint-accent: rgba(48, 209, 88, 0.75);
+  --pane-border-accent: rgba(255, 255, 255, 0.24);
+  --pane-knob: rgba(255, 255, 255, 0.95);
 
   --pane-highlight: rgba(255, 255, 255, 0.22);
   --pane-shadow: rgba(0, 0, 0, 0.5);

@@ -17,6 +17,7 @@ import { Pane } from "@/components/ui/pane";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { componentsMeta } from "@/lib/components-meta";
+import packageJson from "../package.json";
 
 function SectionHeader({ title, sub }: { title: string; sub: string }) {
   return (
@@ -61,7 +62,7 @@ export default function Home() {
 
       <main className="flex flex-1 flex-col items-center gap-20 px-4 pt-12 pb-24 sm:gap-28 sm:pt-20 sm:pb-32">
         <section className="flex max-w-2xl flex-col items-center gap-6 text-center">
-          <Badge>Copy-paste. No npm install.</Badge>
+          <Badge>v{packageJson.version}</Badge>
           <h1 className="text-5xl font-semibold tracking-tight text-balance sm:text-6xl">
             Liquid glass, for React.
           </h1>

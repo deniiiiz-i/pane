@@ -51,31 +51,36 @@ function DialogContent({
   return (
     <DialogPrimitive.Portal data-slot="dialog-portal">
       <DialogOverlay />
-      <DialogPrimitive.Content
-        data-slot="dialog-content"
-        className={cn(
-          "fixed top-1/2 left-1/2 z-50 w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-          className,
-        )}
-        {...props}
-      >
-        <Pane variant="regular" radius={28} className="grid gap-5 p-6">
-          {children}
-          {showCloseButton ? (
-            <Pane
-              variant="clear"
-              interactive
-              radius={999}
-              className="absolute top-4 right-4 inline-flex focus-within:ring-2 focus-within:ring-[var(--pane-highlight)]"
-            >
-              <DialogPrimitive.Close className="flex size-8 items-center justify-center bg-transparent text-muted-foreground outline-none transition-colors hover:text-foreground disabled:pointer-events-none">
-                <XIcon className="size-4" />
-                <span className="sr-only">Close</span>
-              </DialogPrimitive.Close>
-            </Pane>
-          ) : null}
-        </Pane>
-      </DialogPrimitive.Content>
+      {/* centered by flexbox rather than a -50% translate: a transformed
+          ancestor is a containing block for the glass inside it, and the
+          backdrop it samples ends up offset from where the pane is drawn */}
+      <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
+        <DialogPrimitive.Content
+          data-slot="dialog-content"
+          className={cn(
+            "pointer-events-auto w-full max-w-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+            className,
+          )}
+          {...props}
+        >
+          <Pane variant="regular" radius={28} className="grid gap-5 p-6">
+            {children}
+            {showCloseButton ? (
+              <Pane
+                variant="clear"
+                interactive
+                radius={999}
+                className="absolute top-4 right-4 inline-flex has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--pane-highlight)]"
+              >
+                <DialogPrimitive.Close className="flex size-8 items-center justify-center bg-transparent text-muted-foreground outline-none transition-colors hover:text-foreground disabled:pointer-events-none">
+                  <XIcon className="size-4" />
+                  <span className="sr-only">Close</span>
+                </DialogPrimitive.Close>
+              </Pane>
+            ) : null}
+          </Pane>
+        </DialogPrimitive.Content>
+      </div>
     </DialogPrimitive.Portal>
   );
 }

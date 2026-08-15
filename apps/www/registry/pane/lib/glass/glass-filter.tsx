@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { GLASS_DISPLACEMENT } from "./config";
-import { buildDisplacementMapSvg } from "./displacement";
+import { buildDisplacementMap, resolveBand } from "./displacement";
 import type { GlassVariant } from "./types";
 
 interface GlassFilterProps {
@@ -30,15 +30,36 @@ export function GlassFilter({
 }: GlassFilterProps) {
   const cfg = GLASS_DISPLACEMENT[variant];
 
+  /**
+   * How much of the configured bevel this element can carry. Small controls get
+   * a narrower band (see `resolveBand`) and the deflection has to come down
+   * with it: bending the backdrop further than the band is wide drags samples
+   * from past the far side of the rim.
+   */
+  const scale = resolveBand(width, height, cfg.edge) / cfg.edge;
+  const strength = cfg.strength * scale;
+
+  /** px of slack around the element: enough for the blurred map to settle and
+   *  for the rim to sample backdrop from just outside the border box */
+  const margin = Math.ceil(strength + cfg.blur * 3);
+
   const mapUri = React.useMemo(() => {
     if (width <= 0 || height <= 0) return null;
-    return buildDisplacementMapSvg({ width, height, radius, band: cfg.band });
-  }, [width, height, radius, cfg.band]);
+    return buildDisplacementMap({
+      width,
+      height,
+      radius,
+      edge: cfg.edge,
+      margin,
+    });
+  }, [width, height, radius, cfg.edge, margin]);
 
   if (!mapUri) return null;
 
-  const base = cfg.strength;
-  const aberration = cfg.chromaticAberration * 10;
+  /* the map's full deflection is 127/255 off centre, i.e. half a unit, so a
+     `scale` of 2n buys n px of pull at the rim — config states the px. */
+  const base = strength * 2;
+  const aberration = cfg.chromaticAberration * scale * 2;
 
   return (
     <svg
@@ -47,20 +68,27 @@ export function GlassFilter({
       className="absolute h-0 w-0 overflow-hidden"
     >
       <defs>
+        {/* everything sized in px against the element's own box: with
+            percentage regions the map's placement is left to the filter
+            region and the backdrop ends up offset from the surface it
+            belongs to */}
         <filter
           id={id}
-          x="-20%"
-          y="-20%"
-          width="140%"
-          height="140%"
+          filterUnits="userSpaceOnUse"
+          primitiveUnits="userSpaceOnUse"
+          x={-margin}
+          y={-margin}
+          width={width + margin * 2}
+          height={height + margin * 2}
           colorInterpolationFilters="sRGB"
         >
           <feImage
             href={mapUri}
-            x="0"
-            y="0"
-            width={width}
-            height={height}
+            preserveAspectRatio="none"
+            x={-margin}
+            y={-margin}
+            width={width + margin * 2}
+            height={height + margin * 2}
             result="map"
           />
           <feGaussianBlur

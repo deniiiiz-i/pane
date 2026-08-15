@@ -1,14 +1,19 @@
 "use client";
 
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { useTheme } from "next-themes";
 import * as React from "react";
 import { Pane } from "@/components/ui/pane";
 import { cn } from "@/lib/utils";
 
 const STORAGE_KEY = "pane-preview-video";
 
+/** one clip per theme — each is graded for the UI that sits on it */
+const BACKGROUNDS = { light: "/bg-light.mp4", dark: "/bg-dark.mp4" } as const;
+
 export function PreviewSurface({ children }: { children: React.ReactNode }) {
   const [video, setVideo] = React.useState(false);
+  const { resolvedTheme } = useTheme();
 
   React.useEffect(() => {
     setVideo(localStorage.getItem(STORAGE_KEY) === "true");
@@ -20,16 +25,29 @@ export function PreviewSurface({ children }: { children: React.ReactNode }) {
     localStorage.setItem(STORAGE_KEY, String(next));
   };
 
+  // `resolvedTheme` is undefined until next-themes reads the DOM; staying null
+  // through the first paint avoids flashing the light clip at dark-theme users
+  const src =
+    resolvedTheme === "dark"
+      ? BACKGROUNDS.dark
+      : resolvedTheme === "light"
+        ? BACKGROUNDS.light
+        : null;
+  const showVideo = video && src !== null;
+
   return (
     <div
       className={cn(
         "relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-3xl p-4 pt-14 sm:p-10",
-        !video && "border border-foreground/10",
+        !showVideo && "border border-foreground/10",
       )}
     >
-      {video ? (
+      {showVideo ? (
+        // keyed to remount on theme change: assigning a new `src` to a playing
+        // <video> leaves the old frame up until load() is called
         <video
-          src="/background.mp4"
+          key={src}
+          src={src}
           autoPlay
           muted
           loop

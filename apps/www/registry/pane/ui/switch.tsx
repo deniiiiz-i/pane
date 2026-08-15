@@ -16,14 +16,20 @@ function Switch({
       variant="clear"
       radius={999}
       className={cn(
-        "inline-flex h-6 w-10 shrink-0 items-center",
-        "has-[[data-state=checked]]:[--pane-tint-clear:var(--pane-tint-regular)]",
+        "inline-flex h-7 w-14 shrink-0 items-center",
+        // On: the track's glass fills with system green, rim included. Both
+        // fill tokens are needed — a Pane reads `--pane-tint-*` normally but
+        // `--pane-nested-*` inside another Pane, so setting only the first
+        // leaves the switch grey in a card or dialog.
+        "has-[[data-state=checked]]:[--pane-tint-clear:var(--pane-tint-accent)]",
+        "has-[[data-state=checked]]:[--pane-nested-clear:var(--pane-tint-accent)]",
+        "has-[[data-state=checked]]:[--pane-border-clear:var(--pane-border-accent)]",
       )}
     >
       <SwitchPrimitive.Root
         data-slot="switch"
         className={cn(
-          "peer inline-flex h-6 w-10 shrink-0 items-center rounded-full bg-transparent outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--pane-highlight)] disabled:cursor-not-allowed disabled:opacity-50",
+          "peer inline-flex h-7 w-14 shrink-0 items-center rounded-full bg-transparent outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--pane-highlight)] disabled:cursor-not-allowed disabled:opacity-50",
           className,
         )}
         {...props}
@@ -32,9 +38,13 @@ function Switch({
           <motion.span
             layout
             transition={GLASS_SPRING.press}
-            className="pointer-events-none block size-5 translate-x-0.5 data-[state=checked]:translate-x-[18px]"
+            className="pointer-events-none block h-6 w-8 translate-x-0.5 data-[state=checked]:translate-x-[22px]"
           >
-            <Pane variant="clear" radius={999} className="size-5" />
+            <Pane
+              variant="regular"
+              radius={999}
+              className="h-6 w-8 [--pane-nested-regular:var(--pane-knob)]"
+            />
           </motion.span>
         </SwitchPrimitive.Thumb>
       </SwitchPrimitive.Root>

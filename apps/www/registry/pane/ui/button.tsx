@@ -64,7 +64,9 @@ function Button({
       radius={radiusBySize[size ?? "default"]}
       className={cn(
         wrapperVariants({ size }),
-        "focus-within:ring-2 focus-within:ring-[var(--pane-highlight)] focus-within:ring-offset-0",
+        // keyboard only: `focus-within` leaves the ring painted around the pane
+        // after every mouse click
+        "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--pane-highlight)] has-[:focus-visible]:ring-offset-0",
       )}
     >
       <Comp

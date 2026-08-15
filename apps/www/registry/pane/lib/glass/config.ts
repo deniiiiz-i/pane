@@ -6,33 +6,34 @@ import type {
 } from "./types";
 
 /**
- * Single tuning surface for the whole glass engine. Every Pane-based component
- * reads from here, so the entire library's material quality can be adjusted
- * from this one file. Static color/blur tokens live in `app/globals.css`
- * (`--pane-*` custom properties) since they don't need JS; only values that
- * feed the SVG filter or the spring physics live here.
+ * Tuning surface for the glass engine — every Pane-based component reads from
+ * here. Only values feeding the SVG filter or the spring physics live in JS;
+ * static color/blur tokens are `--pane-*` properties in `app/globals.css`.
  */
 
 export const GLASS_DISPLACEMENT: Record<GlassVariant, GlassDisplacementConfig> =
   {
     regular: {
-      strength: 46,
-      band: 0.55,
-      chromaticAberration: 1.2,
-      blur: 6,
+      strength: 11,
+      edge: 13,
+      chromaticAberration: 0.9,
+      blur: 0.6,
     },
     clear: {
-      strength: 64,
-      band: 0.7,
-      chromaticAberration: 2,
-      blur: 5,
+      strength: 15,
+      edge: 17,
+      chromaticAberration: 1.4,
+      blur: 0.6,
     },
   };
 
 export const GLASS_SPECULAR: GlassSpecularConfig = {
   intensity: 0.55,
-  size: 260,
+  size: 180,
   angle: 115,
+  travel: 200,
+  edge: 7,
+  rim: 1.5,
 };
 
 export const GLASS_SPRING: Record<
