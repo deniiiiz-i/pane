@@ -12,6 +12,7 @@
     "lint": {},
     "registry:build": {
       "outputs": ["public/r/**"]
-    }
+    },
+    "registry:validate": {}
   }
 }

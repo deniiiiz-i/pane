@@ -14,7 +14,8 @@ export default function ComponentsPage() {
       <div className="flex flex-col gap-3">
         <h1 className="text-4xl font-semibold tracking-tight">Components</h1>
         <p className="max-w-2xl text-lg text-muted-foreground">
-          Explore all the liquid-glass components available in {siteConfig.name}.
+          Explore all the liquid-glass components available in {siteConfig.name}
+          .
         </p>
       </div>
 

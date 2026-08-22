@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# www
 
-## Getting Started
+The Pane docs site and the registry it serves.
 
-First, run the development server:
+Two things live here:
+
+- **The registry** — items declared in `registry.json`, sources in
+  `registry/pane/`. `shadcn build` flattens them into `public/r/*.json`, which
+  is what the CLI fetches.
+- **The docs site** — a Next.js app rendering a live preview and the full source
+  for each component.
+
+The demos under `registry/pane/examples/` are imported directly by
+`lib/components-meta.ts` to render those previews. They are not published as
+registry items, so they don't show up in `shadcn search`.
+
+## Scripts
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm dev              # predev runs `shadcn build` first
+pnpm registry:build   # shadcn build
+pnpm registry:validate # shadcn registry validate
+pnpm lint             # biome check
+pnpm format           # biome format --write
+pnpm build            # prebuild runs `shadcn build` first
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`public/r/` is generated and gitignored. Delete it before rebuilding if you
+removed an item — `shadcn build` writes files but never prunes stale ones.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Adding a component
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Put the source in `registry/pane/ui/`, and a demo in
+   `registry/pane/examples/`.
+2. Add an entry to `registry.json` with `title`, `description`, `author`,
+   `categories` and `docs`, plus its `dependencies` and `registryDependencies`.
+3. Register it in `lib/components-meta.ts` so it gets a docs page.
+4. Run `pnpm registry:validate`.
 
-## Learn More
+Note that `components.json` here configures the docs site, not consumers of the
+registry. The tsconfig aliases `@/components/ui/*` straight to
+`registry/pane/ui/*`, so the registry sources are the site's components — never
+run `shadcn add` in this workspace, it would write a second copy under
+`components/ui/`.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See the [root README](../../README.md) for installation.

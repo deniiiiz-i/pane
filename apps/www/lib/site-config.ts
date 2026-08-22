@@ -4,7 +4,7 @@ export const siteConfig = {
   description:
     "A shadcn-compatible component registry recreating Apple's liquid glass material. Copy the code or install with the shadcn CLI — no npm package required.",
   links: {
-    github: "https://github.com",
+    github: "https://github.com/deniiiiz-i/pane",
   },
 };
 
