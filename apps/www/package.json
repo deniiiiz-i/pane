@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "shadcn build",
+    "predev": "pnpm registry:build",
     "dev": "next dev",
-    "prebuild": "shadcn build",
+    "prebuild": "pnpm registry:build",
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "registry:build": "shadcn build",
+    "registry:build": "node scripts/sync-registry-vars.mjs && shadcn build",
     "registry:validate": "shadcn registry validate"
   },
   "dependencies": {
