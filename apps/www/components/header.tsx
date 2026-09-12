@@ -14,13 +14,13 @@ export function Header() {
       >
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/pane.png"
+            src="/logo.png"
             alt="Pane"
             width={28}
             height={28}
             className="rounded-lg"
           />
-          <span className="hidden text-sm font-semibold tracking-tight sm:inline">
+          <span className="hidden text-base font-medium tracking-[-0.03em] sm:inline">
             Pane
           </span>
         </Link>
@@ -32,7 +32,7 @@ export function Header() {
             Docs
           </Link>
           <Link
-            href="/docs/components/pane"
+            href="/docs/components"
             className="rounded-full px-3 py-1.5 text-muted-foreground transition-colors hover:text-foreground"
           >
             Components
