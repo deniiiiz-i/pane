@@ -20,7 +20,9 @@ export function Header() {
             height={28}
             className="rounded-lg"
           />
-          <span className="text-sm font-semibold tracking-tight">Pane</span>
+          <span className="hidden text-sm font-semibold tracking-tight sm:inline">
+            Pane
+          </span>
         </Link>
         <nav className="flex items-center gap-1 text-sm font-medium">
           <Link

@@ -5,8 +5,10 @@ import { getSiteUrl } from "@/lib/site-config";
 export const metadata: Metadata = {
   title: "Installation",
   description:
-    "Install Pane components with the shadcn CLI or copy the source directly — register the @pane namespace once and add any component.",
+    "Install Pane components with the shadcn CLI or copy the source directly — set up shadcn/ui, register the @pane namespace once, and add any component.",
 };
+
+const code = "rounded bg-foreground/[0.06] px-1.5 py-0.5";
 
 export default function InstallationPage() {
   const siteUrl = getSiteUrl();
@@ -23,25 +25,38 @@ export default function InstallationPage() {
       </div>
 
       <section className="flex flex-col gap-3">
+        <h2 className="text-xl font-semibold">1. Set up shadcn/ui</h2>
+        <p className="text-sm text-muted-foreground">
+          Pane sits on top of the shadcn/ui project setup: a{" "}
+          <code className={code}>components.json</code>, the Tailwind v4 theme
+          tokens in <code className={code}>globals.css</code>, and the{" "}
+          <code className={code}>@/</code> path aliases. Run init once — skip
+          this step if the project already has shadcn/ui.
+        </p>
+        <CodeBlock lang="bash" code="npx shadcn@latest init" />
+        <p className="text-sm text-muted-foreground">
+          The CLI will ask which primitives to build on (Base UI, React Aria,
+          Radix UI) and which theme to start from (Nova, Vega, Maia…). Neither
+          answer affects Pane: our components ship their own{" "}
+          <code className={code}>radix-ui</code> dependency, and the only base
+          tokens they read are <code className={code}>--foreground</code> and{" "}
+          <code className={code}>--muted-foreground</code>, which every theme
+          defines. Pick whatever suits the rest of your app.
+        </p>
+      </section>
+
+      <section className="flex flex-col gap-3">
         <h2 className="text-xl font-semibold">
-          1. Register the Pane namespace
+          2. Register the Pane namespace
         </h2>
         <p className="text-sm text-muted-foreground">
           Components reference each other internally (a{" "}
-          <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5">
-            Button
-          </code>{" "}
-          depends on{" "}
-          <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5">
-            {"<Pane>"}
-          </code>
-          , which depends on the glass engine). So the CLI doesn&apos;t confuse
-          those with the official shadcn/ui components of the same name, add
-          Pane as a named registry — a one-time step per project — in{" "}
-          <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5">
-            components.json
-          </code>
-          :
+          <code className={code}>Button</code> depends on{" "}
+          <code className={code}>{"<Pane>"}</code>, which depends on the glass
+          engine). So the CLI doesn&apos;t confuse those with the official
+          shadcn/ui components of the same name, add Pane as a named registry —
+          a one-time step per project — in{" "}
+          <code className={code}>components.json</code>:
         </p>
         <CodeBlock
           lang="json"
@@ -51,17 +66,18 @@ export default function InstallationPage() {
   }
 }`}
         />
+        <p className="text-sm text-muted-foreground">
+          Add it alongside the keys <code className={code}>init</code> already
+          wrote — don&apos;t replace the file.
+        </p>
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-xl font-semibold">2. Install a component</h2>
+        <h2 className="text-xl font-semibold">3. Install a component</h2>
         <CodeBlock lang="bash" code="npx shadcn@latest add @pane/button" />
         <p className="text-sm text-muted-foreground">
-          Swap{" "}
-          <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5">
-            button
-          </code>{" "}
-          for any component name on the{" "}
+          Swap <code className={code}>button</code> for any component name on
+          the{" "}
           <a
             href="/docs/components/pane"
             className="font-medium text-foreground underline underline-offset-4"
@@ -69,48 +85,21 @@ export default function InstallationPage() {
             components
           </a>{" "}
           pages. The CLI resolves{" "}
-          <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5">
-            registryDependencies
-          </code>{" "}
-          automatically — installing{" "}
-          <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5">
-            button
-          </code>{" "}
-          also pulls in the{" "}
-          <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5">
-            Pane
-          </code>{" "}
-          primitive, the glass engine, and injects the{" "}
-          <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5">
-            --pane-*
-          </code>{" "}
-          CSS variables into your{" "}
-          <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5">
-            globals.css
-          </code>
-          .
+          <code className={code}>registryDependencies</code> automatically —
+          installing <code className={code}>button</code> also pulls in the{" "}
+          <code className={code}>Pane</code> primitive, the glass engine, and
+          injects the <code className={code}>--pane-*</code> CSS variables into
+          your <code className={code}>globals.css</code>.
         </p>
-      </section>
-
-      <section className="flex flex-col gap-3">
-        <h2 className="text-xl font-semibold">3. Or copy it by hand</h2>
         <p className="text-sm text-muted-foreground">
-          Prefer to copy code directly? Open the &quot;Code&quot; tab on any
-          component&apos;s preview and paste the file into your project.
-          You&apos;ll also need the{" "}
-          <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5">
-            Pane
-          </code>{" "}
-          primitive and the glass engine (
-          <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5">
-            lib/glass
-          </code>{" "}
-          and the two hooks) that every component depends on.
+          Pane components land in <code className={code}>components/ui/</code>{" "}
+          under their own name, so adding{" "}
+          <code className={code}>@pane/button</code> to a project that already
+          has the shadcn/ui <code className={code}>button</code> will ask to
+          overwrite it. Keep both by pointing the{" "}
+          <code className={code}>ui</code> alias elsewhere, or by renaming the
+          file after install.
         </p>
-        <CodeBlock
-          lang="bash"
-          code="npm install class-variance-authority clsx tailwind-merge radix-ui lucide-react motion"
-        />
       </section>
 
       <section className="flex flex-col gap-3">
@@ -119,11 +108,8 @@ export default function InstallationPage() {
           <li>React 19 and Tailwind CSS v4</li>
           <li>
             A build that supports modern CSS —{" "}
-            <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5">
-              backdrop-filter
-            </code>{" "}
-            and, for the full refraction pass, a Chromium-based browser at
-            runtime
+            <code className={code}>backdrop-filter</code> and, for the full
+            refraction pass, a Chromium-based browser at runtime
           </li>
         </ul>
       </section>
