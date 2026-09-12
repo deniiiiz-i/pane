@@ -32,7 +32,7 @@ export function Header() {
             Docs
           </Link>
           <Link
-            href="/docs/components/pane"
+            href="/docs/components"
             className="rounded-full px-3 py-1.5 text-muted-foreground transition-colors hover:text-foreground"
           >
             Components
