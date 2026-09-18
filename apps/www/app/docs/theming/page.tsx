@@ -5,7 +5,7 @@ import { getGlassSource } from "@/lib/registry-source";
 export const metadata: Metadata = {
   title: "Theming",
   description:
-    "Tune the liquid glass material — blur, tint, borders, refraction and spring physics — from one tuning surface.",
+    "Use your project's fonts and customize Pane with CSS variables and glass configuration.",
 };
 
 export default function ThemingPage() {
@@ -16,23 +16,46 @@ export default function ThemingPage() {
       <div className="flex flex-col gap-3">
         <h1 className="text-4xl font-semibold tracking-tight">Theming</h1>
         <p className="max-w-2xl text-lg text-muted-foreground">
-          The glass material has one tuning surface, split across two files.
-          Change either and every component that uses{" "}
+          Pane inherits your project&apos;s fonts. Customize the glass material
+          through CSS variables and the glass configuration. Changes apply to
+          every component that uses{" "}
           <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5">
             {"<Pane>"}
-          </code>{" "}
-          updates.
+          </code>
+          .
         </p>
       </div>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-xl font-semibold">
-          Static tokens — app/globals.css
-        </h2>
+        <h2 className="text-xl font-semibold">Fonts</h2>
         <p className="text-sm text-muted-foreground">
-          Blur radius, saturation, tint, border and shadow colors don&apos;t
-          need JavaScript, so they live as CSS custom properties with light/dark
-          pairs, the same way shadcn/ui themes work.
+          Keep the font loaded by your app. Tailwind&apos;s font-sans utility
+          uses your theme&apos;s font mapping; it is not a replacement for Geist
+          or any other font. For a Next.js project using the default Geist
+          variables, the mapping in your global stylesheet is:
+        </p>
+        <CodeBlock
+          lang="css"
+          code={`@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}`}
+        />
+        <p className="text-sm text-muted-foreground">
+          Keep these declarations inside your existing theme block. For another
+          font, reference the variable defined by your font loader. Pane&apos;s
+          registry supplies glass tokens, not font mappings; no change to your
+          layout is needed for Pane.
+        </p>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-xl font-semibold">Glass tokens — globals.css</h2>
+        <p className="text-sm text-muted-foreground">
+          Installation adds the --pane-* variables below to the stylesheet
+          configured in components.json, usually app/globals.css. Edit them in
+          your project to change blur, saturation, tint, borders and shadows.
+          The .dark rule overrides the light values when dark mode is active.
         </p>
         <CodeBlock
           lang="css"
