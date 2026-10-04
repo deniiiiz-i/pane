@@ -20,6 +20,13 @@ export interface PaneProps
   variant?: GlassVariant;
   /** corner radius in px — kept numeric so the refraction filter can match it exactly */
   radius?: number;
+  /**
+   * Overrides nesting detection. Pass `false` on a pane rendered through a
+   * portal: React context crosses the portal, so a dialog opened from inside a
+   * Pane would otherwise think it is nested and drop its own backdrop, even
+   * though on screen it floats over the page, not over its parent pane.
+   */
+  nested?: boolean;
   children?: React.ReactNode;
 }
 
@@ -91,6 +98,7 @@ export function Pane({
   variant = "regular",
   interactive = false,
   radius = 28,
+  nested: nestedProp,
   className,
   style,
   children,
@@ -100,7 +108,8 @@ export function Pane({
   const filterId = `pane-filter-${reactId}`;
   const { ref, active } = useGlassPointer<HTMLDivElement>();
   const quality = useGlassSupport();
-  const nested = React.useContext(NestedPaneContext);
+  const nestedContext = React.useContext(NestedPaneContext);
+  const nested = nestedProp ?? nestedContext;
   const { width, height } = usePaneSize(ref);
   const canDisplace =
     !nested && quality === "full" && width * height >= GLASS_MIN_FILTER_AREA;

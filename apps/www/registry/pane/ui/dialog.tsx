@@ -63,7 +63,13 @@ function DialogContent({
           )}
           {...props}
         >
-          <Pane variant="regular" radius={28} className="grid gap-5 p-6">
+          {/* the dense overlay material: a dialog is read, not seen through */}
+          <Pane
+            nested={false}
+            variant="regular"
+            radius={28}
+            className="grid gap-5 p-6 [--pane-blur-regular:var(--pane-blur-overlay)] [--pane-tint-regular:var(--pane-tint-overlay)]"
+          >
             {children}
             {showCloseButton ? (
               <Pane

@@ -25,6 +25,7 @@ export const docsNav: { title: string; items: NavItem[] }[] = [
       { title: "Installation", href: "/docs/installation" },
       { title: "Theming", href: "/docs/theming" },
       { title: "Components", href: "/docs/components" },
+      { title: "Changelog", href: "/docs/changelog" },
     ],
   },
   {
@@ -40,6 +41,11 @@ export const docsNav: { title: string; items: NavItem[] }[] = [
       { title: "Tooltip", href: "/docs/components/tooltip" },
       { title: "Dialog", href: "/docs/components/dialog" },
       { title: "Sheet", href: "/docs/components/sheet" },
+      { title: "Popover", href: "/docs/components/popover" },
+      { title: "Dropdown Menu", href: "/docs/components/dropdown-menu" },
+      { title: "Select", href: "/docs/components/select" },
+      { title: "Slider", href: "/docs/components/slider" },
+      { title: "Toggle Group", href: "/docs/components/toggle-group" },
     ],
   },
 ];

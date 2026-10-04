@@ -52,37 +52,6 @@ export default function InstallationPage() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-xl font-semibold">
-          Next.js: restore the default Geist font
-        </h2>
-        <p className="text-sm text-muted-foreground">
-          In a fresh Next.js project, shadcn may replace the font mapping while
-          it initializes the project. If the font changes after installation,
-          open <code className={code}>app/globals.css</code> (or{" "}
-          <code className={code}>src/app/globals.css</code>) and find this line
-          near the top of the existing{" "}
-          <code className={code}>@theme inline</code> block:
-        </p>
-        <CodeBlock lang="css" code="--font-sans: var(--font-sans);" />
-        <p className="text-sm text-muted-foreground">
-          Replace that line with the mappings below. If the block already has a
-          mono mapping, replace it too.
-        </p>
-        <CodeBlock
-          lang="css"
-          code={`--font-sans: var(--font-geist-sans);
---font-mono: var(--font-geist-mono);`}
-        />
-        <p className="text-sm text-muted-foreground">
-          Keep both declarations inside{" "}
-          <code className={code}>@theme inline</code>. They connect
-          Tailwind&apos;s font utilities to the Geist variables that the default
-          Next.js <code className={code}>app/layout.tsx</code> already loads. No
-          layout change is required.
-        </p>
-      </section>
-
-      <section className="flex flex-col gap-3">
         <h2 className="text-xl font-semibold">Requirements</h2>
         <ul className="list-disc space-y-1.5 pl-5 text-sm text-muted-foreground">
           <li>React 19 and Tailwind CSS v4</li>

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CodeBlock } from "@/components/docs/code-block";
 import { ComponentPreview } from "@/components/docs/component-preview";
@@ -59,20 +58,6 @@ export default async function ComponentPage({
           lang="bash"
           code={`npx shadcn@latest add @pane/${component.registryName}`}
         />
-        <p className="text-sm text-muted-foreground">
-          First time using Pane in this project? See{" "}
-          <Link
-            href="/docs/installation"
-            className="font-medium text-foreground underline underline-offset-4"
-          >
-            installation
-          </Link>{" "}
-          to register the{" "}
-          <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5">
-            @pane
-          </code>{" "}
-          namespace.
-        </p>
       </section>
 
       {component.props ? (

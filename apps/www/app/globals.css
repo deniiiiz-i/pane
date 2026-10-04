@@ -21,6 +21,13 @@
   --pane-tint-regular: rgba(255, 255, 255, 0.26);
   --pane-tint-clear: rgba(255, 255, 255, 0.08);
 
+  /* overlay — dialogs and sheets hold text to read and forms to fill, so they
+     trade most of the see-through for legibility. Deliberately past the
+     "opaque plastic" line above: the scrim has already blurred the page, so
+     there is little left worth showing through. */
+  --pane-blur-overlay: 24px;
+  --pane-tint-overlay: rgba(255, 255, 255, 0.76);
+
   /* glass on glass: a Pane inside a Pane can't blur anything new, so it swaps
      its backdrop for these flat translucent layers instead */
   --pane-nested-regular: rgba(255, 255, 255, 0.4);
@@ -48,6 +55,8 @@
 
   --pane-tint-regular: rgba(28, 28, 32, 0.3);
   --pane-tint-clear: rgba(18, 18, 22, 0.12);
+
+  --pane-tint-overlay: rgba(28, 28, 32, 0.76);
 
   --pane-nested-regular: rgba(255, 255, 255, 0.12);
   --pane-nested-clear: rgba(255, 255, 255, 0.07);

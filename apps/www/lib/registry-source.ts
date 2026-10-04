@@ -19,3 +19,27 @@ export function getExampleSource(name: string) {
 export function getGlassSource(name: string) {
   return readSource(`lib/glass/${name}.ts`);
 }
+
+/**
+ * The `--pane-*` block exactly as `shadcn add` writes it into a consumer's
+ * stylesheet, rebuilt from the `pane-style` item so the docs can't drift from
+ * what the registry ships.
+ */
+export function getStyleCssVars() {
+  const registry = JSON.parse(
+    fs.readFileSync(path.join(process.cwd(), "registry.json"), "utf-8"),
+  ) as {
+    items: { name: string; cssVars?: Record<string, Record<string, string>> }[];
+  };
+  const cssVars = registry.items.find(
+    (item) => item.name === "pane-style",
+  )?.cssVars;
+  if (!cssVars) throw new Error("No pane-style cssVars in registry.json");
+
+  const rule = (selector: string, vars: Record<string, string> = {}) =>
+    `${selector} {\n${Object.entries(vars)
+      .map(([name, value]) => `  --${name}: ${value};`)
+      .join("\n")}\n}`;
+
+  return `${rule(":root", cssVars.light)}\n\n${rule(".dark", cssVars.dark)}`;
+}
