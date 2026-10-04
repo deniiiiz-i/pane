@@ -77,6 +77,7 @@ function SelectContent({
         {...props}
       >
         <Pane
+          nested={false}
           variant="regular"
           radius={18}
           className="flex max-h-[inherit] flex-col"

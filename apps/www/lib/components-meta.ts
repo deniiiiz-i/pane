@@ -58,6 +58,12 @@ export const componentsMeta: ComponentMeta[] = [
         default: "false",
         description: "Enables spring-based press/hover feedback.",
       },
+      {
+        name: "nested",
+        type: "boolean",
+        description:
+          "Overrides nesting detection. Pass false on a pane rendered through a portal so it keeps its own backdrop when opened from inside another pane.",
+      },
     ],
   },
   {

@@ -32,6 +32,8 @@ const releases: Release[] = [
       "Toggle Group: a single-choice control with a glass indicator that springs between items.",
       "Fixed the page falling back to a serif font after installing Pane into a fresh Next.js app.",
       'Removed the "tinted" Badge variant. Badges now come in the default style only.',
+      "Dialog and Sheet use a denser overlay material so their content stays readable over busy pages.",
+      "Tooltip, Popover, Dropdown Menu, Select, Dialog and Sheet keep their glass when opened from inside another pane, via the new nested prop on Pane.",
     ],
   },
   {
