@@ -3,11 +3,16 @@ import BadgeDemo from "@/registry/pane/examples/badge-demo";
 import ButtonDemo from "@/registry/pane/examples/button-demo";
 import CardDemo from "@/registry/pane/examples/card-demo";
 import DialogDemo from "@/registry/pane/examples/dialog-demo";
+import DropdownMenuDemo from "@/registry/pane/examples/dropdown-menu-demo";
 import InputDemo from "@/registry/pane/examples/input-demo";
 import PaneDemo from "@/registry/pane/examples/pane-demo";
+import PopoverDemo from "@/registry/pane/examples/popover-demo";
+import SelectDemo from "@/registry/pane/examples/select-demo";
 import SheetDemo from "@/registry/pane/examples/sheet-demo";
+import SliderDemo from "@/registry/pane/examples/slider-demo";
 import SwitchDemo from "@/registry/pane/examples/switch-demo";
 import TabsDemo from "@/registry/pane/examples/tabs-demo";
+import ToggleGroupDemo from "@/registry/pane/examples/toggle-group-demo";
 import TooltipDemo from "@/registry/pane/examples/tooltip-demo";
 
 export interface PropRow {
@@ -138,6 +143,91 @@ export const componentsMeta: ComponentMeta[] = [
     description: "A directional slide-over glass panel.",
     registryName: "sheet",
     demo: SheetDemo,
+  },
+  {
+    slug: "popover",
+    title: "Popover",
+    description: "A floating glass panel anchored to a trigger.",
+    registryName: "popover",
+    demo: PopoverDemo,
+  },
+  {
+    slug: "dropdown-menu",
+    title: "Dropdown Menu",
+    description:
+      "A glass menu with checkbox and radio items, shortcuts and submenus.",
+    registryName: "dropdown-menu",
+    demo: DropdownMenuDemo,
+    props: [
+      {
+        name: "variant",
+        type: '"default" | "destructive"',
+        default: '"default"',
+        description: "Set on DropdownMenuItem to color a destructive action.",
+      },
+      {
+        name: "inset",
+        type: "boolean",
+        default: "false",
+        description:
+          "Set on an item, label or sub-trigger to align it with checkbox and radio items.",
+      },
+    ],
+  },
+  {
+    slug: "select",
+    title: "Select",
+    description: "A glass field that opens a glass list of options.",
+    registryName: "select",
+    demo: SelectDemo,
+    props: [
+      {
+        name: "size",
+        type: '"default" | "sm"',
+        default: '"default"',
+        description: "Set on SelectTrigger.",
+      },
+      {
+        name: "position",
+        type: '"popper" | "item-aligned"',
+        default: '"popper"',
+        description:
+          "Set on SelectContent. Popper floats the list below the trigger; item-aligned lays it over the trigger like a native macOS menu.",
+      },
+    ],
+  },
+  {
+    slug: "slider",
+    title: "Slider",
+    description: "A glass track with a knob that turns to glass while dragged.",
+    registryName: "slider",
+    demo: SliderDemo,
+  },
+  {
+    slug: "toggle-group",
+    title: "Toggle Group",
+    description:
+      "A single-choice control with a glass indicator that springs between segments.",
+    registryName: "toggle-group",
+    demo: ToggleGroupDemo,
+    props: [
+      {
+        name: "value",
+        type: "string",
+        description: "The selected segment, when controlled.",
+      },
+      {
+        name: "defaultValue",
+        type: "string",
+        description: "The initially selected segment, when uncontrolled.",
+      },
+      {
+        name: "onValueChange",
+        type: "(value: string) => void",
+        description:
+          "Called with the new segment. Never called with an empty value — one segment is always selected.",
+      },
+    ],
   },
 ];
 
