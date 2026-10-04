@@ -145,7 +145,7 @@ export default function Home() {
             <ShowcaseCell title="Badge" href="/docs/components/badge">
               <div className="flex flex-wrap items-center justify-center gap-2">
                 <Badge>New</Badge>
-                <Badge variant="tinted">Pro</Badge>
+                <Badge>Pro</Badge>
                 <Badge>v1.0</Badge>
               </div>
             </ShowcaseCell>

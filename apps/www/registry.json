@@ -192,7 +192,7 @@
       "name": "badge",
       "type": "registry:ui",
       "title": "Badge",
-      "description": "A compact glass badge in default and tinted variants, with asChild support for linking.",
+      "description": "A compact glass badge, with asChild support for linking.",
       "author": "Deniz Isik (https://github.com/deniiiiz-i)",
       "categories": ["ui", "display"],
       "docs": "Usage and props: https://pane.theui.company/docs/components/badge",

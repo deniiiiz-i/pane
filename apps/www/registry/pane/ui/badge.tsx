@@ -10,7 +10,6 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default: "text-foreground",
-        tinted: "text-[oklch(0.35_0.14_255)] dark:text-white",
       },
     },
     defaultVariants: { variant: "default" },

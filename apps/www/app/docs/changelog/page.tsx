@@ -21,6 +21,20 @@ interface Release {
 // release by tag.
 const releases: Release[] = [
   {
+    version: "0.2.0",
+    date: "2026-10-04",
+    summary: "Five new components for menus, forms and selection.",
+    changes: [
+      "Popover: a floating glass panel anchored to a trigger.",
+      "Dropdown Menu: a glass menu with checkbox and radio items, shortcuts and submenus.",
+      "Select: a clear glass field that opens a glass list of options.",
+      "Slider: a glass track with a green fill, whose knob swells into clear glass while it is dragged.",
+      "Toggle Group: a single-choice control with a glass indicator that springs between items.",
+      "Fixed the page falling back to a serif font after installing Pane into a fresh Next.js app.",
+      'Removed the "tinted" Badge variant. Badges now come in the default style only.',
+    ],
+  },
+  {
     version: "0.1.0",
     date: "2026-09-21",
     prerelease: true,
