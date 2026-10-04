@@ -43,9 +43,13 @@ export default function ThemingPage() {
         />
         <p className="text-sm text-muted-foreground">
           Keep these declarations inside your existing theme block. For another
-          font, reference the variable defined by your font loader. Pane&apos;s
-          registry supplies glass tokens, not font mappings; no change to your
-          layout is needed for Pane.
+          font, reference the variable defined by your font loader. Besides the
+          glass tokens, Pane adds only a low-priority{" "}
+          <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5">
+            --font-sans
+          </code>{" "}
+          fallback to Geist; any font you set takes precedence, and no change to
+          your layout is needed for Pane.
         </p>
       </section>
 

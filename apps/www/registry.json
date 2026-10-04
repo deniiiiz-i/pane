@@ -7,7 +7,7 @@
       "name": "pane-style",
       "type": "registry:style",
       "title": "Style",
-      "description": "Base style for Pane. Installs the shared dependencies and the --pane-* design tokens — blur, saturation, tint, border, highlight and shadow — for light and dark.",
+      "description": "Base style for Pane. Installs the shared dependencies and the --pane-* design tokens — blur, saturation, tint, border, highlight and shadow — for light and dark, plus a zero-specificity --font-sans fallback to Geist for fresh Next.js apps.",
       "author": "Deniz Isik (https://github.com/deniiiiz-i)",
       "dependencies": [
         "class-variance-authority",
@@ -50,7 +50,14 @@
           "pane-shadow": "rgba(0, 0, 0, 0.5)"
         }
       },
-      "files": []
+      "files": [],
+      "css": {
+        "@layer base": {
+          ":where(html)": {
+            "--font-sans": "var(--font-geist-sans, ui-sans-serif, system-ui, sans-serif)"
+          }
+        }
+      }
     },
     {
       "name": "utils",
