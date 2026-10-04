@@ -15,7 +15,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuSub,
@@ -33,7 +32,6 @@ export default function DropdownMenuDemo() {
         <Button>Options</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-52">
-        <DropdownMenuLabel>Summer.jpg</DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <PencilIcon />

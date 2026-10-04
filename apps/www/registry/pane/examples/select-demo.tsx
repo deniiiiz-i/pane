@@ -17,7 +17,6 @@ export default function SelectDemo() {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Cities</SelectLabel>
-          <SelectItem value="cupertino">Cupertino</SelectItem>
           <SelectItem value="berlin">Berlin</SelectItem>
           <SelectItem value="istanbul">Istanbul</SelectItem>
           <SelectItem value="tokyo">Tokyo</SelectItem>
