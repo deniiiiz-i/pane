@@ -48,8 +48,10 @@ function SelectTrigger({
         {...props}
       >
         {children}
-        <SelectPrimitive.Icon asChild>
-          <ChevronDownIcon className="text-muted-foreground" />
+        {/* no asChild: shadcn rewrites it to Base UI's `render` for base-*
+            styles, which Radix silently ignores */}
+        <SelectPrimitive.Icon className="flex shrink-0 text-muted-foreground">
+          <ChevronDownIcon />
         </SelectPrimitive.Icon>
       </SelectPrimitive.Trigger>
     </Pane>

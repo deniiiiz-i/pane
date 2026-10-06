@@ -1,10 +1,8 @@
 "use client";
 
-import { motion } from "motion/react";
 import { Switch as SwitchPrimitive } from "radix-ui";
 import type * as React from "react";
 import { Pane } from "@/components/ui/pane";
-import { GLASS_SPRING } from "@/lib/glass/config";
 import { cn } from "@/lib/utils";
 
 function Switch({
@@ -34,18 +32,15 @@ function Switch({
         )}
         {...props}
       >
-        <SwitchPrimitive.Thumb asChild>
-          <motion.span
-            layout
-            transition={GLASS_SPRING.press}
-            className="pointer-events-none block h-6 w-8 translate-x-0.5 data-[state=checked]:translate-x-[22px]"
-          >
-            <Pane
-              variant="regular"
-              radius={999}
-              className="h-6 w-8 [--pane-nested-regular:var(--pane-knob)]"
-            />
-          </motion.span>
+        {/* no asChild: shadcn rewrites it to Base UI's `render` for base-*
+            styles, which Radix silently ignores — the knob then loses its
+            size and position. The thumb itself carries the slide instead. */}
+        <SwitchPrimitive.Thumb className="pointer-events-none block h-6 w-8 translate-x-0.5 transition-[translate] duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] data-[state=checked]:translate-x-[22px] motion-reduce:transition-none">
+          <Pane
+            variant="regular"
+            radius={999}
+            className="h-6 w-8 [--pane-nested-regular:var(--pane-knob)]"
+          />
         </SwitchPrimitive.Thumb>
       </SwitchPrimitive.Root>
     </Pane>
