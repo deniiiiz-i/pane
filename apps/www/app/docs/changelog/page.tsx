@@ -31,13 +31,26 @@ interface GitHubRelease {
  */
 async function getReleases(): Promise<Release[]> {
   const repo = new URL(siteConfig.links.github).pathname.slice(1);
+  // anonymous requests share a 60/hour limit per IP, which build machines
+  // regularly exhaust; a token (no scopes needed for a public repo) lifts it
+  const token = process.env.GITHUB_TOKEN;
   const res = await fetch(`https://api.github.com/repos/${repo}/releases`, {
-    headers: { Accept: "application/vnd.github+json" },
+    headers: {
+      Accept: "application/vnd.github+json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
     next: { revalidate: 3600 },
   });
-  // throwing keeps the last good page during revalidation instead of
-  // replacing it with an empty changelog
-  if (!res.ok) throw new Error(`GitHub releases: ${res.status}`);
+  if (!res.ok) {
+    // At build time a GitHub hiccup must not fail the deploy: ship an empty
+    // changelog and let the hourly revalidation fill it in. Later, throwing
+    // keeps the last good page instead of replacing it with an empty one.
+    if (process.env.NEXT_PHASE === "phase-production-build") {
+      console.warn(`Changelog: GitHub releases returned ${res.status}`);
+      return [];
+    }
+    throw new Error(`GitHub releases: ${res.status}`);
+  }
 
   const data: GitHubRelease[] = await res.json();
   return data
@@ -85,6 +98,19 @@ export default async function ChangelogPage() {
           .
         </p>
       </div>
+
+      {releases.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          Release notes couldn't be loaded right now. See them on{" "}
+          <Link
+            href={`${siteConfig.links.github}/releases`}
+            className="font-medium text-foreground underline underline-offset-4"
+          >
+            GitHub
+          </Link>
+          .
+        </p>
+      ) : null}
 
       {releases.map((release) => (
         <section key={release.version} className="flex flex-col gap-3">
