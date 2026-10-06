@@ -17,39 +17,59 @@ interface Release {
   changes: string[];
 }
 
-// Newest first, published GitHub releases only. Each entry links to its
-// release by tag.
-const releases: Release[] = [
-  {
-    version: "0.2.0",
-    date: "2026-10-04",
-    summary: "Five new components for menus, forms and selection.",
-    changes: [
-      "Popover: a floating glass panel anchored to a trigger.",
-      "Dropdown Menu: a glass menu with checkbox and radio items, shortcuts and submenus.",
-      "Select: a clear glass field that opens a glass list of options.",
-      "Slider: a glass track with a green fill, whose knob swells into clear glass while it is dragged.",
-      "Toggle Group: a single-choice control with a glass indicator that springs between items.",
-      "Fixed the page falling back to a serif font after installing Pane into a fresh Next.js app.",
-      'Removed the "tinted" Badge variant. Badges now come in the default style only.',
-      "Dialog and Sheet use a denser overlay material so their content stays readable over busy pages.",
-      "Tooltip, Popover, Dropdown Menu, Select, Dialog and Sheet keep their glass when opened from inside another pane, via the new nested prop on Pane.",
-    ],
-  },
-  {
-    version: "0.1.0",
-    date: "2026-09-21",
-    prerelease: true,
-    summary:
-      "The first public release of Pane as a shadcn registry, installable through the @pane namespace.",
-    changes: [
-      "The Pane primitive: a refracted rim, a tinted backdrop and a specular highlight that follows the pointer, in regular and clear variants.",
-      "Button, Card, Badge, Input, Switch, Tabs, Tooltip, Dialog and Sheet, all built on Pane.",
-      "Glass degrades to blur or a flat tint where the browser can't render it, and honors prefers-reduced-transparency.",
-      "The --pane-* design tokens for light and dark, generated into the registry from globals.css.",
-    ],
-  },
-];
+interface GitHubRelease {
+  tag_name: string;
+  published_at: string | null;
+  draft: boolean;
+  prerelease: boolean;
+  body: string | null;
+}
+
+/**
+ * Release notes come straight from GitHub so they're written once. A release
+ * body is read as a summary paragraph followed by a `- ` bullet per change.
+ */
+async function getReleases(): Promise<Release[]> {
+  const repo = new URL(siteConfig.links.github).pathname.slice(1);
+  // anonymous requests share a 60/hour limit per IP, which build machines
+  // regularly exhaust; a token (no scopes needed for a public repo) lifts it
+  const token = process.env.GITHUB_TOKEN;
+  const res = await fetch(`https://api.github.com/repos/${repo}/releases`, {
+    headers: {
+      Accept: "application/vnd.github+json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    next: { revalidate: 3600 },
+  });
+  if (!res.ok) {
+    // At build time a GitHub hiccup must not fail the deploy: ship an empty
+    // changelog and let the hourly revalidation fill it in. Later, throwing
+    // keeps the last good page instead of replacing it with an empty one.
+    if (process.env.NEXT_PHASE === "phase-production-build") {
+      console.warn(`Changelog: GitHub releases returned ${res.status}`);
+      return [];
+    }
+    throw new Error(`GitHub releases: ${res.status}`);
+  }
+
+  const data: GitHubRelease[] = await res.json();
+  return data
+    .filter((release) => !release.draft && release.published_at)
+    .map((release) => {
+      const lines = (release.body ?? "").split(/\r?\n/).map((l) => l.trim());
+      return {
+        version: release.tag_name.replace(/^v/, ""),
+        date: (release.published_at as string).slice(0, 10),
+        prerelease: release.prerelease,
+        summary: lines
+          .filter((line) => line && !line.startsWith("- "))
+          .join(" "),
+        changes: lines
+          .filter((line) => line.startsWith("- "))
+          .map((line) => line.slice(2)),
+      };
+    });
+}
 
 function formatDate(date: string) {
   return new Date(`${date}T00:00:00Z`).toLocaleDateString("en-US", {
@@ -60,7 +80,9 @@ function formatDate(date: string) {
   });
 }
 
-export default function ChangelogPage() {
+export default async function ChangelogPage() {
+  const releases = await getReleases();
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-3">
@@ -76,6 +98,19 @@ export default function ChangelogPage() {
           .
         </p>
       </div>
+
+      {releases.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          Release notes couldn't be loaded right now. See them on{" "}
+          <Link
+            href={`${siteConfig.links.github}/releases`}
+            className="font-medium text-foreground underline underline-offset-4"
+          >
+            GitHub
+          </Link>
+          .
+        </p>
+      ) : null}
 
       {releases.map((release) => (
         <section key={release.version} className="flex flex-col gap-3">
