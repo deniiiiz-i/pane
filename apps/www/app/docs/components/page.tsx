@@ -1,5 +1,7 @@
+import { ArrowRightIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Pane } from "@/components/ui/pane";
 import { componentsMeta } from "@/lib/components-meta";
 import { siteConfig } from "@/lib/site-config";
 
@@ -14,23 +16,39 @@ export default function ComponentsPage() {
       <div className="flex flex-col gap-3">
         <h1 className="text-4xl font-semibold tracking-tight">Components</h1>
         <p className="max-w-2xl text-lg text-muted-foreground">
-          Explore all the liquid-glass components available in {siteConfig.name}
-          .
+          {componentsMeta.length} liquid-glass components, all built on the same{" "}
+          {siteConfig.name} primitive.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {componentsMeta.map((component) => (
-          <Link
-            key={component.slug}
-            href={`/docs/components/${component.slug}`}
-            className="group flex flex-col gap-2 rounded-xl border border-foreground/10 bg-foreground/[0.02] p-5 transition-colors hover:bg-foreground/[0.04]"
-          >
-            <h2 className="text-xl font-semibold">{component.title}</h2>
-            <p className="text-sm text-muted-foreground line-clamp-2">
-              {component.description}
-            </p>
-          </Link>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {componentsMeta.map(({ slug, title, description, demo: Demo }) => (
+          <Pane key={slug} radius={24} className="group relative flex flex-col">
+            {/* the demo is a picture here, not a control: inert keeps it out
+                of the tab order and lets the whole card act as one link */}
+            <div
+              inert
+              className="flex h-52 items-center justify-center overflow-hidden px-4"
+            >
+              <div className="pointer-events-none flex w-[calc(100%/0.7)] shrink-0 origin-center scale-[0.7] justify-center">
+                <Demo />
+              </div>
+            </div>
+            <div className="flex flex-col gap-1 border-foreground/5 border-t p-5">
+              <h2 className="flex items-center justify-between font-medium">
+                {title}
+                <ArrowRightIcon className="size-4 -translate-x-1 text-muted-foreground opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
+              </h2>
+              <p className="line-clamp-2 text-sm text-muted-foreground">
+                {description}
+              </p>
+            </div>
+            <Link
+              href={`/docs/components/${slug}`}
+              aria-label={title}
+              className="absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-[var(--pane-highlight)]"
+            />
+          </Pane>
         ))}
       </div>
     </div>

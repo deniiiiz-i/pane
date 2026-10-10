@@ -20,12 +20,8 @@ export function getGlassSource(name: string) {
   return readSource(`lib/glass/${name}.ts`);
 }
 
-/**
- * The `--pane-*` block exactly as `shadcn add` writes it into a consumer's
- * stylesheet, rebuilt from the `pane-style` item so the docs can't drift from
- * what the registry ships.
- */
-export function getStyleCssVars() {
+/** The `--pane-*` tokens the registry injects, keyed by theme then name. */
+export function getStyleTokens() {
   const registry = JSON.parse(
     fs.readFileSync(path.join(process.cwd(), "registry.json"), "utf-8"),
   ) as {
@@ -35,6 +31,16 @@ export function getStyleCssVars() {
     (item) => item.name === "pane-style",
   )?.cssVars;
   if (!cssVars) throw new Error("No pane-style cssVars in registry.json");
+  return { light: cssVars.light ?? {}, dark: cssVars.dark ?? {} };
+}
+
+/**
+ * The `--pane-*` block exactly as `shadcn add` writes it into a consumer's
+ * stylesheet, rebuilt from the `pane-style` item so the docs can't drift from
+ * what the registry ships.
+ */
+export function getStyleCssVars() {
+  const cssVars = getStyleTokens();
 
   const rule = (selector: string, vars: Record<string, string> = {}) =>
     `${selector} {\n${Object.entries(vars)
