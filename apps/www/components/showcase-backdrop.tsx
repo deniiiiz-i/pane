@@ -31,11 +31,6 @@ export function ShowcaseBackdrop({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="relative w-full overflow-hidden rounded-[2rem] p-3 sm:p-6">
-      {/* shown while the clip loads, and wherever video can't play */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(at_15%_20%,#f97316_0,transparent_55%),radial-gradient(at_85%_25%,#8b5cf6_0,transparent_55%),radial-gradient(at_50%_90%,#06b6d4_0,transparent_55%)] opacity-60 dark:opacity-40"
-      />
       {src ? (
         // keyed to remount on theme change: swapping `src` on a playing
         // <video> leaves the old frame up until load() is called
