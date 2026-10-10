@@ -9,7 +9,10 @@ import { cn } from "@/lib/utils";
 const STORAGE_KEY = "pane-preview-video";
 
 /** one clip per theme — each is graded for the UI that sits on it */
-const BACKGROUNDS = { light: "/bg-light.mp4", dark: "/bg-dark.mp4" } as const;
+export const BACKGROUNDS = {
+  light: "/bg-light.mp4",
+  dark: "/bg-dark.mp4",
+} as const;
 
 export function PreviewSurface({ children }: { children: React.ReactNode }) {
   const [video, setVideo] = React.useState(false);

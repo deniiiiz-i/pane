@@ -1,7 +1,10 @@
+import { BlocksIcon, DownloadIcon, PaletteIcon } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ComponentPreview } from "@/components/docs/component-preview";
+import { LinkCard } from "@/components/docs/link-card";
+import { Pane } from "@/components/ui/pane";
 import { componentsMeta } from "@/lib/components-meta";
+import { features } from "@/lib/features";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -13,40 +16,59 @@ export default function DocsIntroductionPage() {
   const pane = componentsMeta.find((component) => component.slug === "pane");
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-12">
       <div className="flex flex-col gap-3">
         <h1 className="text-4xl font-semibold tracking-tight">Introduction</h1>
         <p className="max-w-2xl text-lg text-muted-foreground">
-          {siteConfig.description}
-        </p>
-      </div>
-
-      <div className="flex flex-col gap-3 text-sm leading-relaxed text-muted-foreground">
-        <p>
-          {siteConfig.name} is not an npm package. Every component is source you
-          copy into your own project — via{" "}
-          <code className="rounded bg-foreground/[0.06] px-1.5 py-0.5 text-foreground">
-            npx shadcn add
-          </code>{" "}
-          or by hand — so you own the code, can read it, and can change it.
-        </p>
-        <p>
-          Every component is built on top of one primitive,{" "}
-          <Link
-            href="/docs/components/pane"
-            className="font-medium text-foreground underline underline-offset-4"
-          >
-            {"<Pane>"}
-          </Link>
-          , which recreates Apple&apos;s liquid glass material: real-time
-          refraction at the edges, a pointer-reactive specular highlight, and
-          spring physics on press — not just a blurred background.
+          {siteConfig.name} is a set of liquid-glass components for React,
+          distributed as a shadcn registry. Every one of them is built on a
+          single primitive, <code className="text-foreground">{"<Pane>"}</code>,
+          so they refract, tint and respond as one material.
         </p>
       </div>
 
       {pane ? (
         <ComponentPreview registryName={pane.registryName} demo={pane.demo} />
       ) : null}
+
+      <section className="flex flex-col gap-5">
+        <h2 className="text-xl font-semibold">What makes it glass</h2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {features.map(({ icon: Icon, title, description }) => (
+            <Pane key={title} radius={20} className="flex flex-col gap-3 p-5">
+              <Icon className="size-5 text-muted-foreground" />
+              <div className="flex flex-col gap-1">
+                <h3 className="font-medium">{title}</h3>
+                <p className="text-sm text-muted-foreground">{description}</p>
+              </div>
+            </Pane>
+          ))}
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-5">
+        <h2 className="text-xl font-semibold">Next steps</h2>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <LinkCard
+            href="/docs/installation"
+            icon={DownloadIcon}
+            title="Installation"
+            description="Add your first component with the shadcn CLI."
+          />
+          <LinkCard
+            href="/docs/theming"
+            icon={PaletteIcon}
+            title="Theming"
+            description="Tune tint, blur, refraction and springs."
+          />
+          <LinkCard
+            href="/docs/components"
+            icon={BlocksIcon}
+            title="Components"
+            description={`Browse all ${componentsMeta.length} with live previews.`}
+          />
+        </div>
+      </section>
     </div>
   );
 }

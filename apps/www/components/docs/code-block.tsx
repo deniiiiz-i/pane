@@ -24,7 +24,7 @@ export async function CodeBlock({
       </div>
       <div
         data-line-numbers={showLineNumbers || undefined}
-        className="code-block max-h-[520px] overflow-auto p-5 text-[13px] leading-relaxed [&_pre]:!bg-transparent"
+        className="code-block mr-14 max-h-[520px] overflow-auto py-5 pl-5 text-[13px] leading-relaxed [&_pre]:!bg-transparent"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: shiki output is trusted, generated at build/request time from our own source files
         dangerouslySetInnerHTML={{ __html: html }}
       />

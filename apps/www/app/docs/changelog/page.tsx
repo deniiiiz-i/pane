@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { Pane } from "@/components/ui/pane";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -71,6 +71,23 @@ async function getReleases(): Promise<Release[]> {
     });
 }
 
+/** Release notes are plain text with `code` spans, as GitHub renders them. */
+function Inline({ text }: { text: string }) {
+  return text.split(/`([^`]+)`/).map((part, i) =>
+    i % 2 ? (
+      <code
+        // biome-ignore lint/suspicious/noArrayIndexKey: parts of a fixed string
+        key={i}
+        className="rounded bg-foreground/[0.06] px-1 py-0.5 font-mono text-[0.9em] text-foreground"
+      >
+        {part}
+      </code>
+    ) : (
+      part
+    ),
+  );
+}
+
 function formatDate(date: string) {
   return new Date(`${date}T00:00:00Z`).toLocaleDateString("en-US", {
     year: "numeric",
@@ -84,60 +101,86 @@ export default async function ChangelogPage() {
   const releases = await getReleases();
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-10">
       <div className="flex flex-col gap-3">
         <h1 className="text-4xl font-semibold tracking-tight">Changelog</h1>
         <p className="max-w-2xl text-lg text-muted-foreground">
-          Every Pane release, newest first. Full release notes live on{" "}
-          <Link
+          Every Pane release, newest first, with full{" "}
+          <a
             href={`${siteConfig.links.github}/releases`}
+            target="_blank"
+            rel="noreferrer"
             className="font-medium text-foreground underline underline-offset-4"
           >
-            GitHub
-          </Link>
+            release notes
+          </a>
           .
         </p>
       </div>
 
       {releases.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          Release notes couldn't be loaded right now. See them on{" "}
-          <Link
+          Release notes couldn't be loaded right now. Read the{" "}
+          <a
             href={`${siteConfig.links.github}/releases`}
+            target="_blank"
+            rel="noreferrer"
             className="font-medium text-foreground underline underline-offset-4"
           >
-            GitHub
-          </Link>
+            full release notes
+          </a>
           .
         </p>
       ) : null}
 
-      {releases.map((release) => (
-        <section key={release.version} className="flex flex-col gap-3">
-          <div className="flex flex-wrap items-center gap-3">
-            <h2 className="text-xl font-semibold">v{release.version}</h2>
-            {release.prerelease ? <Badge>Pre-release</Badge> : null}
-            <time
-              dateTime={release.date}
-              className="text-sm text-muted-foreground"
-            >
-              {formatDate(release.date)}
-            </time>
-          </div>
-          <p className="text-sm text-muted-foreground">{release.summary}</p>
-          <ul className="flex list-disc flex-col gap-1.5 pl-5 text-sm text-muted-foreground marker:text-foreground/30">
-            {release.changes.map((change) => (
-              <li key={change}>{change}</li>
-            ))}
-          </ul>
-          <Link
-            href={`${siteConfig.links.github}/releases/tag/v${release.version}`}
-            className="w-fit text-sm font-medium underline underline-offset-4"
-          >
-            View on GitHub
-          </Link>
-        </section>
-      ))}
+      <ol className="flex flex-col gap-8">
+        {releases.map((release, index) => (
+          <li key={release.version}>
+            <Pane radius={20} className="flex flex-col gap-4 p-6">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <h2 className="mr-1 text-xl font-semibold">
+                  <a
+                    href={`${siteConfig.links.github}/releases/tag/v${release.version}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline-offset-4 hover:underline"
+                  >
+                    v{release.version}
+                  </a>
+                </h2>
+                {index === 0 ? <Badge>Latest</Badge> : null}
+                {release.prerelease ? <Badge>Pre-release</Badge> : null}
+                <time
+                  dateTime={release.date}
+                  className="basis-full text-sm text-muted-foreground sm:ml-auto sm:basis-auto"
+                >
+                  {formatDate(release.date)}
+                </time>
+              </div>
+              {release.summary ? (
+                <p className="text-[15px] leading-relaxed">
+                  <Inline text={release.summary} />
+                </p>
+              ) : null}
+              {release.changes.length ? (
+                <ul className="flex flex-col gap-2 text-sm text-muted-foreground">
+                  {release.changes.map((change) => (
+                    <li key={change} className="flex gap-3 leading-relaxed">
+                      <span
+                        aria-hidden="true"
+                        className="mt-[0.6em] size-1.5 shrink-0 rounded-full bg-foreground/25"
+                      />
+                      <span>
+                        <Inline text={change} />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </Pane>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }
