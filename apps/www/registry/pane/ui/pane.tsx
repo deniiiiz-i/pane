@@ -146,8 +146,11 @@ export function Pane({
           "--pane-radius": `${radius}px`,
           backdropFilter,
           WebkitBackdropFilter: backdropFilter,
+          // Tailwind's ring utilities are box-shadows too, so the pane's own
+          // shadow has to carry their variables or an inline value would
+          // wipe out every `ring-*` class — focus rings included.
           boxShadow:
-            "0 1px 1px 0 var(--pane-shadow), 0 16px 40px -20px var(--pane-shadow)",
+            "var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), 0 1px 1px 0 var(--pane-shadow), 0 16px 40px -20px var(--pane-shadow)",
         } as React.CSSProperties
       }
       whileTap={interactive ? { scale: 0.97 } : undefined}

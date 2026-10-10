@@ -1,4 +1,4 @@
-import { siteConfig } from "@/lib/site-config";
+import { FooterHeart } from "@/components/footer-heart";
 
 export function Footer() {
   return (
@@ -11,17 +11,8 @@ export function Footer() {
         className="font-medium text-foreground underline underline-offset-4"
       >
         Uniform Interface
-      </a>
-      , with open{" "}
-      <a
-        href={siteConfig.links.github}
-        target="_blank"
-        rel="noreferrer"
-        className="font-medium text-foreground underline underline-offset-4"
-      >
-        source code
-      </a>
-      .
+      </a>{" "}
+      with love <FooterHeart />
     </footer>
   );
 }

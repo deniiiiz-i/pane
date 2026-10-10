@@ -28,7 +28,7 @@ export default function ComponentsPage() {
                 of the tab order and lets the whole card act as one link */}
             <div
               inert
-              className="flex h-52 items-center justify-center overflow-hidden px-4"
+              className="flex h-56 items-center justify-center overflow-hidden px-4"
             >
               <div className="pointer-events-none flex w-[calc(100%/0.7)] shrink-0 origin-center scale-[0.7] justify-center">
                 <Demo />

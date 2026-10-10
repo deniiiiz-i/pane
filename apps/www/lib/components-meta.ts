@@ -1,17 +1,28 @@
 import type { ComponentType } from "react";
+import AccordionDemo from "@/registry/pane/examples/accordion-demo";
+import AlertDemo from "@/registry/pane/examples/alert-demo";
+import AvatarDemo from "@/registry/pane/examples/avatar-demo";
 import BadgeDemo from "@/registry/pane/examples/badge-demo";
 import ButtonDemo from "@/registry/pane/examples/button-demo";
 import CardDemo from "@/registry/pane/examples/card-demo";
+import CheckboxDemo from "@/registry/pane/examples/checkbox-demo";
+import CommandDemo from "@/registry/pane/examples/command-demo";
 import DialogDemo from "@/registry/pane/examples/dialog-demo";
 import DropdownMenuDemo from "@/registry/pane/examples/dropdown-menu-demo";
 import InputDemo from "@/registry/pane/examples/input-demo";
+import NavigationMenuDemo from "@/registry/pane/examples/navigation-menu-demo";
 import PaneDemo from "@/registry/pane/examples/pane-demo";
 import PopoverDemo from "@/registry/pane/examples/popover-demo";
+import ProgressDemo from "@/registry/pane/examples/progress-demo";
+import RadioGroupDemo from "@/registry/pane/examples/radio-group-demo";
 import SelectDemo from "@/registry/pane/examples/select-demo";
 import SheetDemo from "@/registry/pane/examples/sheet-demo";
+import SidebarDemo from "@/registry/pane/examples/sidebar-demo";
 import SliderDemo from "@/registry/pane/examples/slider-demo";
+import SonnerDemo from "@/registry/pane/examples/sonner-demo";
 import SwitchDemo from "@/registry/pane/examples/switch-demo";
 import TabsDemo from "@/registry/pane/examples/tabs-demo";
+import TextareaDemo from "@/registry/pane/examples/textarea-demo";
 import ToggleGroupDemo from "@/registry/pane/examples/toggle-group-demo";
 import TooltipDemo from "@/registry/pane/examples/tooltip-demo";
 
@@ -232,6 +243,155 @@ export const componentsMeta: ComponentMeta[] = [
         type: "(value: string) => void",
         description:
           "Called with the new segment. Never called with an empty value — one segment is always selected.",
+      },
+    ],
+  },
+  {
+    slug: "checkbox",
+    title: "Checkbox",
+    description:
+      "A glass circle that fills with the accent and shows a check when checked.",
+    registryName: "checkbox",
+    demo: CheckboxDemo,
+  },
+  {
+    slug: "radio-group",
+    title: "Radio Group",
+    description: "A set of glass circles where one fills with the accent.",
+    registryName: "radio-group",
+    demo: RadioGroupDemo,
+  },
+  {
+    slug: "textarea",
+    title: "Textarea",
+    description:
+      "A multi-line text field on glass that grows with its content.",
+    registryName: "textarea",
+    demo: TextareaDemo,
+  },
+  {
+    slug: "progress",
+    title: "Progress",
+    description: "A glass track with an accent fill that eases to each value.",
+    registryName: "progress",
+    demo: ProgressDemo,
+    props: [
+      {
+        name: "value",
+        type: "number | null",
+        description:
+          "Progress from 0 to 100. Leave it null for an indeterminate state.",
+      },
+    ],
+  },
+  {
+    slug: "alert",
+    title: "Alert",
+    description: "A glass callout with an icon, title and description.",
+    registryName: "alert",
+    demo: AlertDemo,
+    props: [
+      {
+        name: "variant",
+        type: '"default" | "destructive"',
+        default: '"default"',
+        description: "Visual emphasis.",
+      },
+    ],
+  },
+  {
+    slug: "avatar",
+    title: "Avatar",
+    description:
+      "A glass circle with an image or initials, alone or in a group.",
+    registryName: "avatar",
+    demo: AvatarDemo,
+    props: [
+      {
+        name: "size",
+        type: '"sm" | "default" | "lg"',
+        default: '"default"',
+        description: "Diameter of the circle.",
+      },
+    ],
+  },
+  {
+    slug: "accordion",
+    title: "Accordion",
+    description: "Collapsible sections on one shared glass surface.",
+    registryName: "accordion",
+    demo: AccordionDemo,
+    props: [
+      {
+        name: "type",
+        type: '"single" | "multiple"',
+        description: "Whether one or several items can be open at once.",
+      },
+      {
+        name: "collapsible",
+        type: "boolean",
+        default: "false",
+        description: 'With type="single", lets the open item be closed again.',
+      },
+    ],
+  },
+  {
+    slug: "sonner",
+    title: "Sonner",
+    description: "Toast notifications on the dense glass overlay material.",
+    registryName: "sonner",
+    demo: SonnerDemo,
+  },
+  {
+    slug: "command",
+    title: "Command",
+    description: "A searchable command menu on glass, inline or in a dialog.",
+    registryName: "command",
+    demo: CommandDemo,
+  },
+  {
+    slug: "navigation-menu",
+    title: "Navigation Menu",
+    description:
+      "Site navigation with panels that open on a shared glass viewport.",
+    registryName: "navigation-menu",
+    demo: NavigationMenuDemo,
+    props: [
+      {
+        name: "viewport",
+        type: "boolean",
+        default: "true",
+        description:
+          "Share one glass viewport between panels. With false, each panel floats on its own glass under its trigger.",
+      },
+    ],
+  },
+  {
+    slug: "sidebar",
+    title: "Sidebar",
+    description:
+      "A collapsible glass sidebar with a sliding pill on the active item.",
+    registryName: "sidebar",
+    demo: SidebarDemo,
+    props: [
+      {
+        name: "variant",
+        type: '"sidebar" | "floating" | "inset"',
+        default: '"sidebar"',
+        description:
+          "Edge-to-edge glass column, or a rounded pane inset from the edge.",
+      },
+      {
+        name: "collapsible",
+        type: '"offcanvas" | "icon" | "none"',
+        default: '"offcanvas"',
+        description: "Slide fully out, shrink to icons, or stay put.",
+      },
+      {
+        name: "side",
+        type: '"left" | "right"',
+        default: '"left"',
+        description: "Which edge of the window it sits on.",
       },
     ],
   },

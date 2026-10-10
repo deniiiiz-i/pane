@@ -27,7 +27,7 @@ export function MobileNav() {
           <SheetTitle>Documentation</SheetTitle>
         </SheetHeader>
         <div className="overflow-y-auto">
-          <DocsNav onNavigate={() => setOpen(false)} />
+          <DocsNav panel onNavigate={() => setOpen(false)} />
         </div>
       </SheetContent>
     </Sheet>
