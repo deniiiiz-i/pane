@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { Tabs as TabsPrimitive } from "radix-ui";
 import * as React from "react";
 import { Pane } from "@/components/ui/pane";
-import { GLASS_SPRING } from "@/lib/glass/config";
+import { useGlassConfig } from "@/lib/glass/context";
 import { cn } from "@/lib/utils";
 
 interface TabsContextValue {
@@ -68,6 +68,7 @@ function TabsTrigger({
 }: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
   const ctx = React.useContext(TabsContext);
   const isActive = ctx?.value === value;
+  const { spring } = useGlassConfig();
 
   return (
     <TabsPrimitive.Trigger
@@ -82,7 +83,7 @@ function TabsTrigger({
       {isActive ? (
         <motion.div
           layoutId={`${ctx?.indicatorId}-indicator`}
-          transition={GLASS_SPRING.hover}
+          transition={spring.hover}
           className="absolute inset-0"
         >
           <Pane variant="clear" radius={12} className="h-full w-full" />

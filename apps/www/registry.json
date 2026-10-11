@@ -93,6 +93,10 @@
           "type": "registry:lib"
         },
         {
+          "path": "registry/pane/lib/glass/context.tsx",
+          "type": "registry:lib"
+        },
+        {
           "path": "registry/pane/lib/glass/displacement.ts",
           "type": "registry:lib"
         },

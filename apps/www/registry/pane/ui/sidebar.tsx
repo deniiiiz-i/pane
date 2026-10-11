@@ -20,7 +20,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { GLASS_SPRING } from "@/lib/glass/config";
+import { useGlassConfig } from "@/lib/glass/context";
 import { cn } from "@/lib/utils";
 
 // The API mirrors shadcn/ui's Sidebar, so its examples and blocks work with
@@ -538,6 +538,7 @@ function SidebarMenuButton({
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const Comp = asChild ? Slot.Root : "button";
   const { isMobile, state, indicatorId } = useSidebar();
+  const { spring } = useGlassConfig();
 
   const button = (
     <Comp
@@ -551,7 +552,7 @@ function SidebarMenuButton({
       {isActive ? (
         <Pane
           layoutId={indicatorId}
-          transition={GLASS_SPRING.hover}
+          transition={spring.hover}
           variant="clear"
           radius={12}
           className="-z-10 absolute inset-0"

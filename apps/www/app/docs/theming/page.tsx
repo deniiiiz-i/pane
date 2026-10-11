@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import type { CSSProperties } from "react";
 import { CodeBlock } from "@/components/docs/code-block";
 import { Pane } from "@/components/ui/pane";
@@ -64,6 +65,18 @@ const groups: { title: string; tokens: Record<string, string> }[] = [
     },
   },
 ];
+
+const providerExample = `import { GlassConfigProvider } from "@/lib/glass/context";
+
+export function SnappyToolbar({ children }: { children: React.ReactNode }) {
+  return (
+    <GlassConfigProvider
+      value={{ spring: { press: { stiffness: 700, damping: 35 } } }}
+    >
+      {children}
+    </GlassConfigProvider>
+  );
+}`;
 
 const tiers = [
   {
@@ -218,6 +231,24 @@ export default function ThemingPage() {
           feedback.
         </p>
         <CodeBlock lang="tsx" code={getGlassSource("config")} />
+      </section>
+
+      <section className="flex flex-col gap-5">
+        <h2 className="text-xl font-semibold">Overrides for one section</h2>
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          To change the springs or the refraction for part of a page only, wrap
+          it in <code className={code}>GlassConfigProvider</code>. It merges
+          onto the values above, so pass just what differs. Try values live in
+          the{" "}
+          <Link
+            href="/playground"
+            className="font-medium text-foreground underline underline-offset-4"
+          >
+            playground
+          </Link>
+          .
+        </p>
+        <CodeBlock lang="tsx" code={providerExample} />
       </section>
 
       <section className="flex flex-col gap-5">

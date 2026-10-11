@@ -1,0 +1,400 @@
+"use client";
+
+import { PlusIcon, RotateCcwIcon } from "lucide-react";
+import { useTheme } from "next-themes";
+import * as React from "react";
+import { CopyButton } from "@/components/docs/copy-button";
+import { ShowcaseBackdrop } from "@/components/showcase-backdrop";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Pane } from "@/components/ui/pane";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import {
+  GLASS_DISPLACEMENT,
+  GLASS_SPECULAR,
+  GLASS_SPRING,
+} from "@/lib/glass/config";
+import { type GlassConfig, GlassConfigProvider } from "@/lib/glass/context";
+
+type Tokens = Record<"light" | "dark", Record<string, string>>;
+
+/**
+ * Motion presets. Default is what ships in config.ts; the others are starting
+ * points for a feel, applied to both press and hover springs.
+ */
+const presets = {
+  default: null,
+  snappy: { stiffness: 700, damping: 35 },
+  soft: { stiffness: 180, damping: 22 },
+  bouncy: { stiffness: 420, damping: 12 },
+} as const;
+type Preset = keyof typeof presets;
+
+const initial = {
+  /** replaced by the shipped blur from the tokens on mount */
+  blur: 12,
+  tint: 100,
+  saturation: 1.7,
+  refraction: 100,
+  aberration: 100,
+  highlight: GLASS_SPECULAR.intensity,
+  preset: "default" as Preset,
+  stiffness: GLASS_SPRING.press.stiffness,
+  damping: GLASS_SPRING.press.damping,
+};
+type State = typeof initial;
+
+/** "rgba(255, 255, 255, 0.26)" → [255, 255, 255, 0.26] */
+function parseRgba(value: string) {
+  const parts = value.match(/[\d.]+/g)?.map(Number) ?? [0, 0, 0, 1];
+  return parts as [number, number, number, number];
+}
+
+function rgba(value: string, factor: number) {
+  const [r, g, b, a] = parseRgba(value);
+  const alpha = Math.min(1, Math.round(a * factor * 1000) / 1000);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+const round = (value: number, digits = 2) =>
+  Math.round(value * 10 ** digits) / 10 ** digits;
+
+function Control({
+  label,
+  value,
+  children,
+}: {
+  label: string;
+  value: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between text-sm">
+        <span className="font-medium">{label}</span>
+        <span className="text-muted-foreground tabular-nums">{value}</span>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function CodePanel({ title, code }: { title: string; code: string }) {
+  return (
+    <Pane variant="clear" radius={20} className="relative flex flex-col">
+      <div className="flex items-center justify-between border-foreground/5 border-b py-2 pr-2 pl-5">
+        <span className="font-medium text-sm">{title}</span>
+        <CopyButton text={code} />
+      </div>
+      <pre className="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed">
+        {code}
+      </pre>
+    </Pane>
+  );
+}
+
+export function Playground({ tokens }: { tokens: Tokens }) {
+  const baseBlur = Number.parseFloat(tokens.light["pane-blur-regular"] ?? "12");
+  const baseSaturation = Number.parseFloat(
+    tokens.light["pane-saturation"] ?? "1.7",
+  );
+  const defaults = { ...initial, blur: baseBlur, saturation: baseSaturation };
+  const [state, setState] = React.useState<State>(defaults);
+  const { resolvedTheme } = useTheme();
+  const theme = resolvedTheme === "dark" ? "dark" : "light";
+  // the theme is only known on the client: theme-specific tint waits for
+  // mount so the first render matches the server HTML
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
+
+  const set = <K extends keyof State>(key: K, value: State[K]) =>
+    setState((s) => ({ ...s, [key]: value }));
+
+  const choosePreset = (preset: Preset) => {
+    const values = presets[preset] ?? GLASS_SPRING.press;
+    setState((s) => ({
+      ...s,
+      preset,
+      stiffness: values.stiffness,
+      damping: values.damping,
+    }));
+  };
+
+  const light = { ...tokens.light };
+  const dark = { ...tokens.light, ...tokens.dark };
+  const clearRatio =
+    Number.parseFloat(light["pane-blur-clear"] ?? "5") / baseBlur;
+  const tintFactor = state.tint / 100;
+
+  const cssFor = (vars: Record<string, string>) => ({
+    "pane-tint-regular": rgba(vars["pane-tint-regular"], tintFactor),
+    "pane-tint-clear": rgba(vars["pane-tint-clear"], tintFactor),
+  });
+  const shared = {
+    "pane-blur-regular": `${state.blur}px`,
+    "pane-blur-clear": `${round(state.blur * clearRatio, 1)}px`,
+    "pane-saturation": String(state.saturation),
+  };
+  const themed = cssFor(theme === "dark" ? dark : light);
+
+  const style = Object.fromEntries(
+    Object.entries(mounted ? { ...shared, ...themed } : shared).map(
+      ([k, v]) => [`--${k}`, v],
+    ),
+  ) as React.CSSProperties;
+
+  // the default preset keeps press and hover as shipped; moving a slider or
+  // picking another preset drives both springs from the same values
+  const isDefaultSpring =
+    state.preset === "default" &&
+    state.stiffness === GLASS_SPRING.press.stiffness &&
+    state.damping === GLASS_SPRING.press.damping;
+
+  const config = React.useMemo<Partial<GlassConfig>>(() => {
+    const scale = (variant: "regular" | "clear") => ({
+      ...GLASS_DISPLACEMENT[variant],
+      strength: round(
+        (GLASS_DISPLACEMENT[variant].strength * state.refraction) / 100,
+        1,
+      ),
+      chromaticAberration: round(
+        (GLASS_DISPLACEMENT[variant].chromaticAberration * state.aberration) /
+          100,
+      ),
+    });
+    return {
+      displacement: { regular: scale("regular"), clear: scale("clear") },
+      specular: { ...GLASS_SPECULAR, intensity: state.highlight },
+      spring: isDefaultSpring
+        ? GLASS_SPRING
+        : {
+            ...GLASS_SPRING,
+            press: {
+              ...GLASS_SPRING.press,
+              stiffness: state.stiffness,
+              damping: state.damping,
+            },
+            hover: {
+              ...GLASS_SPRING.hover,
+              stiffness: state.stiffness,
+              damping: state.damping,
+            },
+          },
+    };
+  }, [
+    state.refraction,
+    state.aberration,
+    state.highlight,
+    state.stiffness,
+    state.damping,
+    isDefaultSpring,
+  ]);
+
+  const css = [
+    ":root {",
+    ...Object.entries({ ...shared, ...cssFor(light) }).map(
+      ([k, v]) => `  --${k}: ${v};`,
+    ),
+    "}",
+    "",
+    ".dark {",
+    ...Object.entries(cssFor(dark)).map(([k, v]) => `  --${k}: ${v};`),
+    "}",
+  ].join("\n");
+
+  const springs = config.spring ?? GLASS_SPRING;
+  const ts = [
+    "// lib/glass/config.ts",
+    `export const GLASS_DISPLACEMENT = ${JSON.stringify(config.displacement, null, 2)};`,
+    "",
+    `export const GLASS_SPECULAR = ${JSON.stringify(config.specular, null, 2)};`,
+    "",
+    `export const GLASS_SPRING = ${JSON.stringify(springs, null, 2)};`,
+  ]
+    .join("\n")
+    .replace(/"(\w+)":/g, "$1:");
+
+  return (
+    <div className="flex flex-col gap-10">
+      <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
+        <ShowcaseBackdrop toggleKey="pane-playground-video">
+          <GlassConfigProvider value={config}>
+            <div
+              style={style}
+              className="grid min-h-[30rem] place-content-center gap-8 p-4 sm:p-10"
+            >
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Button>Continue</Button>
+                <Button variant="destructive">Delete</Button>
+                <Button size="icon" aria-label="Add">
+                  <PlusIcon />
+                </Button>
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-6">
+                <Tabs defaultValue="music">
+                  <TabsList>
+                    <TabsTrigger value="music">Music</TabsTrigger>
+                    <TabsTrigger value="photos">Photos</TabsTrigger>
+                    <TabsTrigger value="files">Files</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+                <ToggleGroup defaultValue="week">
+                  <ToggleGroupItem value="day">Day</ToggleGroupItem>
+                  <ToggleGroupItem value="week">Week</ToggleGroupItem>
+                  <ToggleGroupItem value="month">Month</ToggleGroupItem>
+                </ToggleGroup>
+              </div>
+              <div className="mx-auto flex w-full max-w-sm flex-col gap-5">
+                <Input placeholder="Email address" />
+                <Slider defaultValue={[60]} />
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <Switch id="pg-switch" defaultChecked />
+                    <label htmlFor="pg-switch" className="font-medium text-sm">
+                      Airplane mode
+                    </label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Checkbox defaultChecked aria-label="Done" />
+                    <Badge>New</Badge>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </GlassConfigProvider>
+        </ShowcaseBackdrop>
+
+        <Pane radius={24} className="flex flex-col gap-6 self-start p-5">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold">Material</h2>
+            <Button
+              size="sm"
+              onClick={() => setState(defaults)}
+              aria-label="Reset all"
+            >
+              <RotateCcwIcon />
+              Reset
+            </Button>
+          </div>
+          <Control label="Blur" value={`${state.blur}px`}>
+            <Slider
+              min={0}
+              max={40}
+              step={1}
+              value={[state.blur]}
+              onValueChange={([v]) => set("blur", v)}
+              aria-label="Blur"
+            />
+          </Control>
+          <Control label="Tint" value={`${state.tint}%`}>
+            <Slider
+              min={0}
+              max={300}
+              step={5}
+              value={[state.tint]}
+              onValueChange={([v]) => set("tint", v)}
+              aria-label="Tint"
+            />
+          </Control>
+          <Control label="Saturation" value={state.saturation.toFixed(1)}>
+            <Slider
+              min={1}
+              max={3}
+              step={0.1}
+              value={[state.saturation]}
+              onValueChange={([v]) => set("saturation", round(v, 1))}
+              aria-label="Saturation"
+            />
+          </Control>
+          <Control label="Refraction" value={`${state.refraction}%`}>
+            <Slider
+              min={0}
+              max={200}
+              step={5}
+              value={[state.refraction]}
+              onValueChange={([v]) => set("refraction", v)}
+              aria-label="Refraction"
+            />
+          </Control>
+          <Control label="Chromatic aberration" value={`${state.aberration}%`}>
+            <Slider
+              min={0}
+              max={300}
+              step={5}
+              value={[state.aberration]}
+              onValueChange={([v]) => set("aberration", v)}
+              aria-label="Chromatic aberration"
+            />
+          </Control>
+          <Control label="Highlight" value={state.highlight.toFixed(2)}>
+            <Slider
+              min={0}
+              max={1}
+              step={0.05}
+              value={[state.highlight]}
+              onValueChange={([v]) => set("highlight", round(v))}
+              aria-label="Highlight"
+            />
+          </Control>
+
+          <div className="flex flex-col gap-5 border-foreground/5 border-t pt-5">
+            <h2 className="font-semibold">Motion</h2>
+            <ToggleGroup
+              value={state.preset}
+              onValueChange={(v) => v && choosePreset(v as Preset)}
+              className="w-full"
+            >
+              {(Object.keys(presets) as Preset[]).map((p) => (
+                <ToggleGroupItem key={p} value={p} className="capitalize">
+                  {p}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
+            <Control label="Stiffness" value={String(state.stiffness)}>
+              <Slider
+                min={50}
+                max={1000}
+                step={10}
+                value={[state.stiffness]}
+                onValueChange={([v]) => set("stiffness", v)}
+                aria-label="Stiffness"
+              />
+            </Control>
+            <Control label="Damping" value={String(state.damping)}>
+              <Slider
+                min={5}
+                max={60}
+                step={1}
+                value={[state.damping]}
+                onValueChange={([v]) => set("damping", v)}
+                aria-label="Damping"
+              />
+            </Control>
+            <p className="text-muted-foreground text-xs leading-relaxed">
+              Press a button, switch a tab or drag the slider to feel it.
+            </p>
+          </div>
+        </Pane>
+      </div>
+
+      <section className="flex flex-col gap-5">
+        <div className="flex flex-col gap-1.5">
+          <h2 className="font-semibold text-xl">Use it in your project</h2>
+          <p className="text-muted-foreground text-sm">
+            Paste the variables into your <code>globals.css</code> and the
+            values into <code>lib/glass/config.ts</code>.
+          </p>
+        </div>
+        <div className="grid items-start gap-4 lg:grid-cols-2">
+          <CodePanel title="globals.css" code={css} />
+          <CodePanel title="lib/glass/config.ts" code={ts} />
+        </div>
+      </section>
+    </div>
+  );
+}

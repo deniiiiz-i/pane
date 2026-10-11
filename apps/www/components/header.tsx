@@ -32,9 +32,7 @@ export function Header() {
             height={28}
             className="rounded-lg"
           />
-          <span className="hidden text-base font-medium tracking-[-0.03em] sm:inline">
-            Pane
-          </span>
+          <span className="text-base font-medium tracking-[-0.03em]">Pane</span>
         </Link>
         <HeaderNav />
         <div className="flex items-center gap-2">

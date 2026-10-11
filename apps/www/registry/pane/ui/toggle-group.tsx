@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { ToggleGroup as ToggleGroupPrimitive } from "radix-ui";
 import * as React from "react";
 import { Pane } from "@/components/ui/pane";
-import { GLASS_SPRING } from "@/lib/glass/config";
+import { useGlassConfig } from "@/lib/glass/context";
 import { cn } from "@/lib/utils";
 
 interface ToggleGroupContextValue {
@@ -74,6 +74,7 @@ function ToggleGroupItem({
 }: React.ComponentProps<typeof ToggleGroupPrimitive.Item>) {
   const ctx = React.useContext(ToggleGroupContext);
   const isActive = ctx?.value === value;
+  const { spring } = useGlassConfig();
 
   return (
     <ToggleGroupPrimitive.Item
@@ -88,7 +89,7 @@ function ToggleGroupItem({
       {isActive ? (
         <motion.div
           layoutId={`${ctx?.indicatorId}-indicator`}
-          transition={GLASS_SPRING.hover}
+          transition={spring.hover}
           className="absolute inset-0"
         >
           <Pane variant="clear" radius={12} className="h-full w-full" />
