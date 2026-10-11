@@ -125,15 +125,30 @@ function Control({
   );
 }
 
-function CodePanel({ title, code }: { title: string; code: string }) {
+/**
+ * One panel for both files: a tab per file and a single copy button for the
+ * open one, so the export reads as one thing rather than two code stubs.
+ */
+function ExportPanel({ files }: { files: { name: string; code: string }[] }) {
+  const [active, setActive] = React.useState(files[0]?.name ?? "");
+  const current = files.find((file) => file.name === active) ?? files[0];
+
   return (
-    <Pane variant="clear" radius={20} className="relative flex flex-col">
-      <div className="flex items-center justify-between border-foreground/5 border-b py-2 pr-2 pl-5">
-        <span className="font-medium text-sm">{title}</span>
-        <CopyButton text={code} />
+    <Pane variant="clear" radius={24} className="flex flex-col">
+      <div className="flex items-center justify-between gap-3 border-foreground/5 border-b p-2">
+        <Tabs value={current?.name} onValueChange={setActive}>
+          <TabsList>
+            {files.map((file) => (
+              <TabsTrigger key={file.name} value={file.name}>
+                {file.name}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+        {current ? <CopyButton text={current.code} /> : null}
       </div>
-      <pre className="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed">
-        {code}
+      <pre className="max-h-[26rem] overflow-auto p-5 font-mono text-[13px] leading-relaxed">
+        {current?.code}
       </pre>
     </Pane>
   );
@@ -274,7 +289,6 @@ export function Playground({ tokens }: { tokens: Tokens }) {
 
   const springs = config.spring ?? GLASS_SPRING;
   const ts = [
-    "// lib/glass/config.ts",
     `export const GLASS_DISPLACEMENT = ${JSON.stringify(config.displacement, null, 2)};`,
     "",
     `export const GLASS_SPECULAR = ${JSON.stringify(config.specular, null, 2)};`,
@@ -461,10 +475,12 @@ export function Playground({ tokens }: { tokens: Tokens }) {
             values into <code>lib/glass/config.ts</code>.
           </p>
         </div>
-        <div className="grid items-start gap-4 lg:grid-cols-2">
-          <CodePanel title="globals.css" code={css} />
-          <CodePanel title="lib/glass/config.ts" code={ts} />
-        </div>
+        <ExportPanel
+          files={[
+            { name: "globals.css", code: css },
+            { name: "lib/glass/config.ts", code: ts },
+          ]}
+        />
       </section>
     </div>
   );
