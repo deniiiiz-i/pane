@@ -1,6 +1,6 @@
 "use client";
 
-import { PlusIcon, RotateCcwIcon } from "lucide-react";
+import { CheckIcon, LinkIcon, PlusIcon, RotateCcwIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import * as React from "react";
 import { CopyButton } from "@/components/docs/copy-button";
@@ -64,6 +64,47 @@ function rgba(value: string, factor: number) {
 const round = (value: number, digits = 2) =>
   Math.round(value * 10 ** digits) / 10 ** digits;
 
+/** Slider bounds, also used to clamp values read from a shared link. */
+const limits: Record<Exclude<keyof State, "preset">, [number, number]> = {
+  blur: [0, 40],
+  tint: [0, 300],
+  saturation: [1, 3],
+  refraction: [0, 200],
+  aberration: [0, 300],
+  highlight: [0, 1],
+  stiffness: [50, 1000],
+  damping: [5, 60],
+};
+
+/**
+ * The settings live in the query string, so a link reproduces them and a
+ * reload keeps them. Only values that differ from the defaults are written,
+ * which keeps shared links short.
+ */
+function toQuery(state: State, defaults: State) {
+  const params = new URLSearchParams();
+  for (const key of Object.keys(state) as (keyof State)[]) {
+    if (state[key] !== defaults[key]) params.set(key, String(state[key]));
+  }
+  return params.toString();
+}
+
+function fromQuery(search: string, defaults: State): State {
+  const params = new URLSearchParams(search);
+  const next = { ...defaults };
+  for (const [key, [min, max]] of Object.entries(limits) as [
+    keyof typeof limits,
+    [number, number],
+  ][]) {
+    const raw = params.get(key);
+    const value = raw === null ? Number.NaN : Number(raw);
+    if (Number.isFinite(value)) next[key] = Math.min(max, Math.max(min, value));
+  }
+  const preset = params.get("preset");
+  if (preset && preset in presets) next.preset = preset as Preset;
+  return next;
+}
+
 function Control({
   label,
   value,
@@ -103,14 +144,38 @@ export function Playground({ tokens }: { tokens: Tokens }) {
   const baseSaturation = Number.parseFloat(
     tokens.light["pane-saturation"] ?? "1.7",
   );
-  const defaults = { ...initial, blur: baseBlur, saturation: baseSaturation };
+  const defaults = React.useMemo(
+    () => ({ ...initial, blur: baseBlur, saturation: baseSaturation }),
+    [baseBlur, baseSaturation],
+  );
   const [state, setState] = React.useState<State>(defaults);
   const { resolvedTheme } = useTheme();
   const theme = resolvedTheme === "dark" ? "dark" : "light";
   // the theme is only known on the client: theme-specific tint waits for
   // mount so the first render matches the server HTML
   const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => setMounted(true), []);
+  const [copied, setCopied] = React.useState(false);
+
+  // read the link once on mount (the server renders the defaults), then keep
+  // the address bar in step with every change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: read the URL once
+  React.useEffect(() => {
+    setState(fromQuery(window.location.search, defaults));
+    setMounted(true);
+  }, []);
+
+  React.useEffect(() => {
+    if (!mounted) return;
+    const query = toQuery(state, defaults);
+    const url = `${window.location.pathname}${query ? `?${query}` : ""}`;
+    window.history.replaceState(null, "", url);
+  }, [state, mounted, defaults]);
+
+  const share = async () => {
+    await navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
 
   const set = <K extends keyof State>(key: K, value: State[K]) =>
     setState((s) => ({ ...s, [key]: value }));
@@ -272,14 +337,20 @@ export function Playground({ tokens }: { tokens: Tokens }) {
         <Pane radius={24} className="flex flex-col gap-6 self-start p-5">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold">Material</h2>
-            <Button
-              size="sm"
-              onClick={() => setState(defaults)}
-              aria-label="Reset all"
-            >
-              <RotateCcwIcon />
-              Reset
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button size="sm" onClick={share}>
+                {copied ? <CheckIcon /> : <LinkIcon />}
+                {copied ? "Copied" : "Share"}
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => setState(defaults)}
+                aria-label="Reset all"
+              >
+                <RotateCcwIcon />
+                Reset
+              </Button>
+            </div>
           </div>
           <Control label="Blur" value={`${state.blur}px`}>
             <Slider
