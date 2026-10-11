@@ -28,6 +28,8 @@ apps
             ├── hooks
             ├── lib
             └── ui
+packages
+└── tests
 ```
 
 | Path                            | Description                                                        |
@@ -39,6 +41,7 @@ apps
 | `apps/www/registry/pane/examples` | The demos shown on each component page.                          |
 | `apps/www/registry/pane/lib`    | The glass engine: refraction filter, springs and shared config.    |
 | `apps/www/registry.json`        | The registry manifest.                                             |
+| `packages/tests`                | Integration tests that install the registry with the shadcn CLI.   |
 
 ## Development
 
@@ -97,13 +100,13 @@ When a project uses a Base UI style (such as `base-nova`), `shadcn add` rewrites
 
 ### Test the install
 
-Before opening a pull request, install your component into a fresh Next.js app that uses a Base UI style, straight from your local registry:
+Before opening a pull request, run:
 
 ```bash
-npx shadcn@latest add http://localhost:3000/r/[name].json
+pnpm test
 ```
 
-The installed file should match the one in the repository, and the app should type-check.
+It builds the registry, installs every component into a fresh Next.js app that uses a Base UI style, and fails if any installed file differs from its source or the app doesn't type-check. CI runs the same tests on every pull request. See [`packages/tests`](packages/tests/README.md) for more.
 
 ## Commit Convention
 
@@ -123,3 +126,13 @@ e.g. `feat(www): add a playground page` or `fix: keep the switch thumb in place`
 ## Requests for new components
 
 If you have a request for a new component, please open an issue on GitHub. We'll be happy to help you out.
+
+## Testing
+
+Tests are written using [Vitest](https://vitest.dev) and live in `packages/tests`. Run them from the root of the repository:
+
+```bash
+pnpm test
+```
+
+Please make sure the tests pass before opening a pull request.
