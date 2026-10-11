@@ -429,7 +429,7 @@ function SidebarGroupLabel({
       data-slot="sidebar-group-label"
       data-sidebar="group-label"
       className={cn(
-        "flex h-8 shrink-0 items-center rounded-[10px] px-2 font-medium text-muted-foreground text-xs outline-none ring-[var(--pane-highlight)] transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+        "flex h-8 shrink-0 items-center rounded-[10px] px-2 font-medium text-muted-foreground text-xs outline-none ring-ring/50 transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-[3px] [&>svg]:size-4 [&>svg]:shrink-0",
         "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
         className,
       )}
@@ -450,7 +450,7 @@ function SidebarGroupAction({
       data-slot="sidebar-group-action"
       data-sidebar="group-action"
       className={cn(
-        "absolute top-3.5 right-3 flex aspect-square w-5 items-center justify-center rounded-[8px] p-0 outline-none ring-[var(--pane-highlight)] transition-transform hover:bg-foreground/[0.07] focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+        "absolute top-3.5 right-3 flex aspect-square w-5 items-center justify-center rounded-[8px] p-0 outline-none ring-ring/50 transition-transform hover:bg-foreground/[0.07] focus-visible:ring-[3px] [&>svg]:size-4 [&>svg]:shrink-0",
         // a bigger hit area on touch screens
         "after:absolute after:-inset-2 md:after:hidden",
         "group-data-[collapsible=icon]:hidden",
@@ -498,7 +498,7 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
 }
 
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button relative isolate flex w-full items-center gap-2 overflow-hidden rounded-[12px] p-2 text-left text-muted-foreground text-sm outline-none ring-[var(--pane-highlight)] transition-[width,height,padding,color] hover:text-foreground focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-foreground data-[state=open]:text-foreground group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
+  "peer/menu-button relative isolate flex w-full items-center gap-2 overflow-hidden rounded-[12px] p-2 text-left text-muted-foreground text-sm outline-none ring-ring/50 transition-[width,height,padding,color] hover:text-foreground focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium data-[active=true]:text-foreground data-[state=open]:text-foreground group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -606,7 +606,7 @@ function SidebarMenuAction({
       data-slot="sidebar-menu-action"
       data-sidebar="menu-action"
       className={cn(
-        "absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-[8px] p-0 text-muted-foreground outline-none ring-[var(--pane-highlight)] transition-transform hover:bg-foreground/[0.07] hover:text-foreground focus-visible:ring-2 peer-hover/menu-button:text-foreground [&>svg]:size-4 [&>svg]:shrink-0",
+        "absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-[8px] p-0 text-muted-foreground outline-none ring-ring/50 transition-transform hover:bg-foreground/[0.07] hover:text-foreground focus-visible:ring-[3px] peer-hover/menu-button:text-foreground [&>svg]:size-4 [&>svg]:shrink-0",
         // a bigger hit area on touch screens
         "after:absolute after:-inset-2 md:after:hidden",
         "peer-data-[size=sm]/menu-button:top-1",
@@ -731,7 +731,7 @@ function SidebarMenuSubButton({
       data-size={size}
       data-active={isActive}
       className={cn(
-        "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-[10px] px-2 text-muted-foreground outline-none ring-[var(--pane-highlight)] hover:bg-foreground/[0.05] hover:text-foreground focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
+        "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-[10px] px-2 text-muted-foreground outline-none ring-ring/50 hover:bg-foreground/[0.05] hover:text-foreground focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
         "data-[active=true]:bg-foreground/[0.07] data-[active=true]:font-medium data-[active=true]:text-foreground",
         size === "sm" && "text-xs",
         size === "md" && "text-sm",

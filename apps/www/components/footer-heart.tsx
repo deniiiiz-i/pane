@@ -14,7 +14,7 @@ export function FooterHeart() {
       onClick={() => setIndex((i) => (i + 1) % hearts.length)}
       aria-label="love"
       title="Click me"
-      className="inline-block cursor-pointer rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-foreground/30"
+      className="inline-block cursor-pointer rounded-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
     >
       {/* remounts on each change so the pop plays again */}
       <span

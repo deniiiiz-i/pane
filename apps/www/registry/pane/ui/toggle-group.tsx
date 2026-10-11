@@ -81,7 +81,7 @@ function ToggleGroupItem({
       value={value}
       data-slot="toggle-group-item"
       className={cn(
-        "relative inline-flex h-8 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-sm font-medium text-muted-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--pane-highlight)] disabled:pointer-events-none disabled:opacity-50 data-[state=on]:text-foreground [&_svg]:size-4 [&_svg]:shrink-0",
+        "relative inline-flex h-8 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-sm font-medium text-muted-foreground outline-none transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:text-foreground [&_svg]:size-4 [&_svg]:shrink-0",
         className,
       )}
       {...props}

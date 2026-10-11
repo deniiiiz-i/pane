@@ -27,7 +27,7 @@ export function LinkCard({
       <Link
         href={href}
         aria-label={title}
-        className="absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-[var(--pane-highlight)]"
+        className="absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
       />
     </Pane>
   );

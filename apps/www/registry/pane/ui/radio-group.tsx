@@ -27,7 +27,7 @@ function RadioGroupItem({
       variant="clear"
       radius={999}
       className={cn(
-        "inline-flex size-5 shrink-0 has-[:disabled]:opacity-50 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--pane-highlight)]",
+        "inline-flex size-5 shrink-0 has-[:disabled]:opacity-50 has-[:focus-visible]:ring-[3px] has-[:focus-visible]:ring-ring/50",
         // Selected: the accent fills the glass, as in Checkbox and Switch
         "has-[[data-state=checked]]:[--pane-tint-clear:var(--pane-tint-accent)]",
         "has-[[data-state=checked]]:[--pane-nested-clear:var(--pane-tint-accent)]",

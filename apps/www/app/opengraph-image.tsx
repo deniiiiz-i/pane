@@ -14,6 +14,13 @@ export const contentType = "image/png";
 export default async function Image() {
   const logo = await readFile(join(process.cwd(), "public/logo.png"));
   const logoSrc = `data:image/png;base64,${logo.toString("base64")}`;
+  // A frame of the site's dark backdrop clip. ImageResponse can't blur what's
+  // behind an element, so the frost under the card is baked into this image —
+  // the card below must keep the same size to sit exactly on it.
+  const background = await readFile(
+    join(process.cwd(), "public/og-background.jpg"),
+  );
+  const backgroundSrc = `data:image/jpeg;base64,${background.toString("base64")}`;
 
   return new ImageResponse(
     <div
@@ -23,8 +30,8 @@ export default async function Image() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background:
-          "linear-gradient(135deg, #d946ef 0%, #fb923c 50%, #22d3ee 100%)",
+        backgroundImage: `url(${backgroundSrc})`,
+        backgroundSize: "1200px 630px",
         fontFamily: "sans-serif",
       }}
     >
@@ -35,11 +42,12 @@ export default async function Image() {
           alignItems: "center",
           justifyContent: "center",
           gap: 28,
-          padding: "56px 96px",
+          width: 760,
+          height: 440,
           borderRadius: 48,
-          background: "rgba(255, 255, 255, 0.22)",
-          border: "1px solid rgba(255, 255, 255, 0.65)",
-          boxShadow: "0 24px 80px rgba(0, 0, 0, 0.18)",
+          background: "rgba(28, 28, 32, 0.35)",
+          border: "1px solid rgba(255, 255, 255, 0.28)",
+          boxShadow: "0 24px 80px rgba(0, 0, 0, 0.45)",
         }}
       >
         {/* biome-ignore lint/performance/noImgElement: ImageResponse renders JSX to a static PNG — next/image does not exist here */}
@@ -64,7 +72,7 @@ export default async function Image() {
               fontWeight: 700,
               letterSpacing: "-0.03em",
               color: "#ffffff",
-              textShadow: "0 2px 24px rgba(0, 0, 0, 0.15)",
+              textShadow: "0 2px 24px rgba(0, 0, 0, 0.35)",
             }}
           >
             {siteConfig.name}
@@ -73,7 +81,7 @@ export default async function Image() {
             style={{
               fontSize: 36,
               fontWeight: 500,
-              color: "rgba(255, 255, 255, 0.92)",
+              color: "rgba(255, 255, 255, 0.85)",
             }}
           >
             {siteConfig.tagline}

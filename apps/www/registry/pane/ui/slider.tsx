@@ -79,7 +79,7 @@ function Slider({
           data-slot="slider-thumb"
           // biome-ignore lint/suspicious/noArrayIndexKey: thumbs are positional
           key={index}
-          className="block rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[var(--pane-highlight)] disabled:pointer-events-none"
+          className="block rounded-full outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none"
         >
           {/* At rest the thumb is an opaque knob; while dragged it swells and
               drops the knob fill, turning into clear glass over the track —

@@ -68,7 +68,7 @@ function Button({
         wrapperVariants({ size }),
         // keyboard only: `focus-within` leaves the ring painted around the pane
         // after every mouse click
-        "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--pane-highlight)] has-[:focus-visible]:ring-offset-0",
+        "has-[:focus-visible]:ring-[3px] has-[:focus-visible]:ring-ring/50 has-[:focus-visible]:ring-offset-0",
       )}
     >
       <Comp

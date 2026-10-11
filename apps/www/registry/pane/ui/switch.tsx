@@ -14,7 +14,9 @@ function Switch({
       variant="clear"
       radius={999}
       className={cn(
-        "inline-flex h-7 w-14 shrink-0 items-center",
+        // the ring sits on the glass: the pane clips anything drawn outside
+        // the switch inside it
+        "inline-flex h-7 w-14 shrink-0 items-center has-[:focus-visible]:ring-[3px] has-[:focus-visible]:ring-ring/50",
         // On: the track's glass fills with system green, rim included. Both
         // fill tokens are needed — a Pane reads `--pane-tint-*` normally but
         // `--pane-nested-*` inside another Pane, so setting only the first
@@ -27,7 +29,7 @@ function Switch({
       <SwitchPrimitive.Root
         data-slot="switch"
         className={cn(
-          "peer inline-flex h-7 w-14 shrink-0 items-center rounded-full bg-transparent outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--pane-highlight)] disabled:cursor-not-allowed disabled:opacity-50",
+          "peer inline-flex h-7 w-14 shrink-0 items-center rounded-full bg-transparent outline-none transition-colors disabled:cursor-not-allowed disabled:opacity-50",
           className,
         )}
         {...props}
