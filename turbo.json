@@ -16,6 +16,7 @@
     "registry:validate": {},
     "test": {
       "dependsOn": ["www#registry:build"],
+      "passThroughEnv": ["PANE_TEST_APP"],
       "cache": false
     }
   }
