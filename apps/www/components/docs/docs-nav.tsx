@@ -23,9 +23,12 @@ import { docsNav } from "@/lib/site-config";
 export function DocsNav({
   onNavigate,
   panel = false,
+  mobile = false,
 }: {
   onNavigate?: () => void;
   panel?: boolean;
+  /** include links meant for the mobile menu only */
+  mobile?: boolean;
 }) {
   const pathname = usePathname();
 
@@ -34,22 +37,24 @@ export function DocsNav({
       <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu className="gap-0.5">
-          {group.items.map((item) => {
-            const active = pathname === item.href;
-            return (
-              <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton asChild isActive={active}>
-                  <Link
-                    href={item.href}
-                    onClick={onNavigate}
-                    aria-current={active ? "page" : undefined}
-                  >
-                    {item.title}
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            );
-          })}
+          {group.items
+            .filter((item) => mobile || !item.mobileOnly)
+            .map((item) => {
+              const active = pathname === item.href;
+              return (
+                <SidebarMenuItem key={item.href}>
+                  <SidebarMenuButton asChild isActive={active}>
+                    <Link
+                      href={item.href}
+                      onClick={onNavigate}
+                      aria-current={active ? "page" : undefined}
+                    >
+                      {item.title}
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              );
+            })}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

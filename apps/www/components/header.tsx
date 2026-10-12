@@ -38,7 +38,7 @@ export function Header() {
           <span className="text-base font-medium tracking-[-0.03em]">Pane</span>
         </Link>
         <HeaderNav />
-        <div className="flex items-center justify-end gap-2">
+        <div className="col-start-3 flex items-center justify-end gap-2">
           <CommandMenu />
           <Button size="icon" asChild>
             <a
