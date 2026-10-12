@@ -7,7 +7,7 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
     <Pane
       variant="clear"
       radius={14}
-      className="h-10 w-full focus-within:ring-2 focus-within:ring-[var(--pane-highlight)] focus-within:ring-offset-0 has-[:disabled]:opacity-50"
+      className="h-10 w-full focus-within:ring-[3px] focus-within:ring-ring/50 focus-within:ring-offset-0 has-[:disabled]:opacity-50"
     >
       <input
         type={type}

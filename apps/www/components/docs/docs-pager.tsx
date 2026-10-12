@@ -6,7 +6,10 @@ import { usePathname } from "next/navigation";
 import { Pane } from "@/components/ui/pane";
 import { docsNav } from "@/lib/site-config";
 
-const pages = docsNav.flatMap((group) => group.items);
+// only docs pages: mobile-only links lead out of the docs
+const pages = docsNav
+  .flatMap((group) => group.items)
+  .filter((page) => !page.mobileOnly);
 
 export function DocsPager() {
   const pathname = usePathname();

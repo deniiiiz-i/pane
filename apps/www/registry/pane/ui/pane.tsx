@@ -4,11 +4,8 @@ import { motion } from "motion/react";
 import * as React from "react";
 import { useGlassPointer } from "@/hooks/use-glass-pointer";
 import { useGlassSupport } from "@/hooks/use-glass-support";
-import {
-  GLASS_MIN_FILTER_AREA,
-  GLASS_SPECULAR,
-  GLASS_SPRING,
-} from "@/lib/glass/config";
+import { GLASS_MIN_FILTER_AREA } from "@/lib/glass/config";
+import { useGlassConfig } from "@/lib/glass/context";
 import { GlassFilter } from "@/lib/glass/glass-filter";
 import type { GlassVariant } from "@/lib/glass/types";
 import { type PaneVariantProps, paneVariants } from "@/lib/glass/variants";
@@ -111,13 +108,14 @@ export function Pane({
   const nestedContext = React.useContext(NestedPaneContext);
   const nested = nestedProp ?? nestedContext;
   const { width, height } = usePaneSize(ref);
+  const { spring, specular } = useGlassConfig();
   const canDisplace =
     !nested && quality === "full" && width * height >= GLASS_MIN_FILTER_AREA;
 
   // the glow has to stay a rim: on a 28px switch a wide band meets in the
   // middle and reads as a frosted collar rather than an edge
   const shortSide = Math.min(width || Infinity, height || Infinity);
-  const glow = Math.max(2, Math.min(GLASS_SPECULAR.edge, shortSide * 0.12));
+  const glow = Math.max(2, Math.min(specular.edge, shortSide * 0.12));
 
   const blurVar = `var(--pane-blur-${variant})`;
   const backdropFilter =
@@ -146,13 +144,16 @@ export function Pane({
           "--pane-radius": `${radius}px`,
           backdropFilter,
           WebkitBackdropFilter: backdropFilter,
+          // Tailwind's ring utilities are box-shadows too, so the pane's own
+          // shadow has to carry their variables or an inline value would
+          // wipe out every `ring-*` class — focus rings included.
           boxShadow:
-            "0 1px 1px 0 var(--pane-shadow), 0 16px 40px -20px var(--pane-shadow)",
+            "var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), 0 1px 1px 0 var(--pane-shadow), 0 16px 40px -20px var(--pane-shadow)",
         } as React.CSSProperties
       }
       whileTap={interactive ? { scale: 0.97 } : undefined}
       whileHover={interactive ? { scale: 1.015 } : undefined}
-      transition={GLASS_SPRING.press}
+      transition={spring.press}
       {...props}
     >
       {/* body — flat tint only, so content sits on an even surface */}
@@ -178,10 +179,10 @@ export function Pane({
         aria-hidden="true"
         className="-z-10 pointer-events-none absolute inset-0 rounded-[inherit] mix-blend-screen"
         style={{
-          ...edgeBand(GLASS_SPECULAR.rim),
+          ...edgeBand(specular.rim),
           opacity: active ? 1 : 0.85,
           transition: "opacity 300ms ease-out",
-          background: `conic-gradient(from var(--pane-spin, ${GLASS_SPECULAR.angle}deg) at 50% 50%, transparent 0deg, var(--pane-highlight) 22deg, transparent 68deg, transparent 112deg, var(--pane-highlight) 158deg, transparent 204deg, transparent 248deg, var(--pane-highlight) 338deg, transparent 360deg)`,
+          background: `conic-gradient(from var(--pane-spin, ${specular.angle}deg) at 50% 50%, transparent 0deg, var(--pane-highlight) 22deg, transparent 68deg, transparent 112deg, var(--pane-highlight) 158deg, transparent 204deg, transparent 248deg, var(--pane-highlight) 338deg, transparent 360deg)`,
         }}
       />
       {/* glint: a soft blob of light pinned to the pointer, on a wider band
@@ -191,8 +192,8 @@ export function Pane({
         className="-z-10 pointer-events-none absolute inset-0 rounded-[inherit] mix-blend-screen transition-opacity duration-300 ease-out"
         style={{
           ...edgeBand(glow),
-          opacity: active ? GLASS_SPECULAR.intensity : 0,
-          background: `radial-gradient(${GLASS_SPECULAR.size}px circle at var(--pane-mx, 50%) var(--pane-my, 32%), var(--pane-highlight), transparent 70%)`,
+          opacity: active ? specular.intensity : 0,
+          background: `radial-gradient(${specular.size}px circle at var(--pane-mx, 50%) var(--pane-my, 32%), var(--pane-highlight), transparent 70%)`,
         }}
       />
       <span

@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { Slider as SliderPrimitive } from "radix-ui";
 import * as React from "react";
 import { Pane } from "@/components/ui/pane";
-import { GLASS_SPRING } from "@/lib/glass/config";
+import { useGlassConfig } from "@/lib/glass/context";
 import { cn } from "@/lib/utils";
 
 function Slider({
@@ -19,6 +19,7 @@ function Slider({
   ...props
 }: React.ComponentProps<typeof SliderPrimitive.Root>) {
   const [dragging, setDragging] = React.useState(false);
+  const { spring } = useGlassConfig();
   const thumbs = React.useMemo(
     () =>
       Array.isArray(value)
@@ -78,7 +79,7 @@ function Slider({
           data-slot="slider-thumb"
           // biome-ignore lint/suspicious/noArrayIndexKey: thumbs are positional
           key={index}
-          className="block rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[var(--pane-highlight)] disabled:pointer-events-none"
+          className="block rounded-full outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none"
         >
           {/* At rest the thumb is an opaque knob; while dragged it swells and
               drops the knob fill, turning into clear glass over the track —
@@ -86,7 +87,7 @@ function Slider({
           <motion.span
             className="block"
             animate={{ scale: dragging ? 1.3 : 1 }}
-            transition={GLASS_SPRING.press}
+            transition={spring.press}
           >
             <Pane
               variant="regular"

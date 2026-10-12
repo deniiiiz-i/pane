@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { CommandMenu } from "@/components/command-menu";
 import { MobileNav } from "@/components/docs/mobile-nav";
 import { HeaderNav } from "@/components/header-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -22,9 +23,11 @@ export function Header() {
       <Pane
         variant="clear"
         radius={22}
-        className="flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-2.5"
+        // three columns, so the links stay centred however wide the
+        // buttons on the right get
+        className="grid w-full max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 py-2.5"
       >
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex w-fit items-center gap-2">
           <Image
             src="/logo.png"
             alt="Pane"
@@ -32,12 +35,11 @@ export function Header() {
             height={28}
             className="rounded-lg"
           />
-          <span className="hidden text-base font-medium tracking-[-0.03em] sm:inline">
-            Pane
-          </span>
+          <span className="text-base font-medium tracking-[-0.03em]">Pane</span>
         </Link>
         <HeaderNav />
-        <div className="flex items-center gap-2">
+        <div className="col-start-3 flex items-center justify-end gap-2">
+          <CommandMenu />
           <Button size="icon" asChild>
             <a
               href={siteConfig.links.github}

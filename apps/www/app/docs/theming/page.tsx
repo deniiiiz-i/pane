@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import type { CSSProperties } from "react";
 import { CodeBlock } from "@/components/docs/code-block";
 import { Pane } from "@/components/ui/pane";
@@ -51,7 +52,7 @@ const groups: { title: string; tokens: Record<string, string> }[] = [
       "pane-border-width": "Width of the rim.",
       "pane-border-regular": "Rim color of regular glass.",
       "pane-border-clear": "Rim color of clear glass.",
-      "pane-highlight": "Rim arcs, the pointer glint and focus rings.",
+      "pane-highlight": "Rim arcs and the pointer glint.",
       "pane-shadow": "Drop shadow under every pane.",
     },
   },
@@ -64,6 +65,18 @@ const groups: { title: string; tokens: Record<string, string> }[] = [
     },
   },
 ];
+
+const providerExample = `import { GlassConfigProvider } from "@/lib/glass/context";
+
+export function SnappyToolbar({ children }: { children: React.ReactNode }) {
+  return (
+    <GlassConfigProvider
+      value={{ spring: { press: { stiffness: 700, damping: 35 } } }}
+    >
+      {children}
+    </GlassConfigProvider>
+  );
+}`;
 
 const tiers = [
   {
@@ -163,7 +176,9 @@ export default function ThemingPage() {
           <code className={code}>components.json</code>, usually{" "}
           <code className={code}>app/globals.css</code>. Light values live on{" "}
           <code className={code}>:root</code>, and{" "}
-          <code className={code}>.dark</code> overrides them in dark mode.
+          <code className={code}>.dark</code> overrides them in dark mode. Focus
+          rings use your theme&apos;s <code className={code}>--ring</code>, as
+          shadcn/ui components do.
         </p>
 
         {allGroups.map((group) => (
@@ -218,6 +233,24 @@ export default function ThemingPage() {
           feedback.
         </p>
         <CodeBlock lang="tsx" code={getGlassSource("config")} />
+      </section>
+
+      <section className="flex flex-col gap-5">
+        <h2 className="text-xl font-semibold">Overrides for one section</h2>
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          To change the springs or the refraction for part of a page only, wrap
+          it in <code className={code}>GlassConfigProvider</code>. It merges
+          onto the values above, so pass just what differs. Try values live in
+          the{" "}
+          <Link
+            href="/playground"
+            className="font-medium text-foreground underline underline-offset-4"
+          >
+            playground
+          </Link>
+          .
+        </p>
+        <CodeBlock lang="tsx" code={providerExample} />
       </section>
 
       <section className="flex flex-col gap-5">

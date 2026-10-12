@@ -60,10 +60,33 @@ export default async function ComponentPage({
         />
       </section>
 
-      {component.props ? (
+      {component.usage ? (
         <section className="flex flex-col gap-3">
-          <h2 className="text-xl font-semibold">Props</h2>
-          <PropsTable rows={component.props} />
+          <h2 className="text-xl font-semibold">Usage</h2>
+          <CodeBlock lang="tsx" code={component.usage} />
+        </section>
+      ) : null}
+
+      {component.props || component.reference ? (
+        <section className="flex flex-col gap-3">
+          <h2 className="text-xl font-semibold">
+            {component.props ? "Props" : "API reference"}
+          </h2>
+          {component.props ? <PropsTable rows={component.props} /> : null}
+          {component.reference ? (
+            <p className="text-sm text-muted-foreground">
+              {component.props ? "Also accepts" : "Accepts"} every prop of{" "}
+              <a
+                href={component.reference.href}
+                target="_blank"
+                rel="noreferrer"
+                className="font-medium text-foreground underline underline-offset-4"
+              >
+                {component.reference.label}
+              </a>
+              .
+            </p>
+          ) : null}
         </section>
       ) : null}
     </div>

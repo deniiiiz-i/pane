@@ -35,3 +35,25 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+  test:
+    name: Install into a Base UI project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      # Vitest needs Node 22
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # builds the registry, installs every component into a fresh app with
+      # a base-* style, and checks the files arrive unchanged and type-check
+      - name: Test
+        run: pnpm test

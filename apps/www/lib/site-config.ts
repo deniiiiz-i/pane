@@ -15,6 +15,8 @@ export function getSiteUrl() {
 export interface NavItem {
   title: string;
   href: string;
+  /** shown in the mobile menu only — on desktop the header already links it */
+  mobileOnly?: boolean;
 }
 
 export const docsNav: { title: string; items: NavItem[] }[] = [
@@ -24,6 +26,7 @@ export const docsNav: { title: string; items: NavItem[] }[] = [
       { title: "Introduction", href: "/docs" },
       { title: "Installation", href: "/docs/installation" },
       { title: "Theming", href: "/docs/theming" },
+      { title: "Playground", href: "/playground", mobileOnly: true },
       { title: "Components", href: "/docs/components" },
       { title: "Changelog", href: "/docs/changelog" },
     ],
@@ -46,6 +49,17 @@ export const docsNav: { title: string; items: NavItem[] }[] = [
       { title: "Select", href: "/docs/components/select" },
       { title: "Slider", href: "/docs/components/slider" },
       { title: "Toggle Group", href: "/docs/components/toggle-group" },
+      { title: "Sidebar", href: "/docs/components/sidebar" },
+      { title: "Sonner", href: "/docs/components/sonner" },
+      { title: "Command", href: "/docs/components/command" },
+      { title: "Navigation Menu", href: "/docs/components/navigation-menu" },
+      { title: "Alert", href: "/docs/components/alert" },
+      { title: "Avatar", href: "/docs/components/avatar" },
+      { title: "Accordion", href: "/docs/components/accordion" },
+      { title: "Checkbox", href: "/docs/components/checkbox" },
+      { title: "Radio Group", href: "/docs/components/radio-group" },
+      { title: "Textarea", href: "/docs/components/textarea" },
+      { title: "Progress", href: "/docs/components/progress" },
     ],
   },
 ];

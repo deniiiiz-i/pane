@@ -2,7 +2,7 @@
 
 import { useMotionValue, useSpring } from "motion/react";
 import * as React from "react";
-import { GLASS_SPECULAR, GLASS_SPRING } from "../lib/glass/config";
+import { useGlassConfig } from "../lib/glass/context";
 
 const IDLE_X = 50;
 const IDLE_Y = 32;
@@ -26,12 +26,13 @@ export function useGlassPointer<T extends HTMLElement>() {
   const ref = React.useRef<T | null>(null);
   const [active, setActive] = React.useState(false);
 
+  const { specular, spring } = useGlassConfig();
   const mx = useMotionValue(IDLE_X);
   const my = useMotionValue(IDLE_Y);
-  const spin = useMotionValue(GLASS_SPECULAR.angle);
-  const smoothX = useSpring(mx, GLASS_SPRING.hover);
-  const smoothY = useSpring(my, GLASS_SPRING.hover);
-  const smoothSpin = useSpring(spin, GLASS_SPRING.drag);
+  const spin = useMotionValue(specular.angle);
+  const smoothX = useSpring(mx, spring.hover);
+  const smoothY = useSpring(my, spring.hover);
+  const smoothSpin = useSpring(spin, spring.drag);
 
   React.useEffect(() => {
     const node = ref.current;
@@ -39,7 +40,7 @@ export function useGlassPointer<T extends HTMLElement>() {
 
     node.style.setProperty("--pane-mx", `${IDLE_X}%`);
     node.style.setProperty("--pane-my", `${IDLE_Y}%`);
-    node.style.setProperty("--pane-spin", `${GLASS_SPECULAR.angle}deg`);
+    node.style.setProperty("--pane-spin", `${specular.angle}deg`);
 
     const unsubX = smoothX.on("change", (value) => {
       node.style.setProperty("--pane-mx", `${value}%`);
@@ -61,7 +62,7 @@ export function useGlassPointer<T extends HTMLElement>() {
     const spinFromScroll = (rect: DOMRect) => {
       const viewport = window.innerHeight || 1;
       const progress = clamp01((rect.top + rect.height / 2) / viewport);
-      return GLASS_SPECULAR.angle + (progress - 0.5) * GLASS_SPECULAR.travel;
+      return specular.angle + (progress - 0.5) * specular.travel;
     };
 
     let pointerOn = false;
@@ -117,7 +118,16 @@ export function useGlassPointer<T extends HTMLElement>() {
       unsubY();
       unsubSpin();
     };
-  }, [mx, my, spin, smoothX, smoothY, smoothSpin]);
+  }, [
+    mx,
+    my,
+    spin,
+    smoothX,
+    smoothY,
+    smoothSpin,
+    specular.angle,
+    specular.travel,
+  ]);
 
   return { ref, active };
 }

@@ -6,7 +6,8 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "registry:build": "turbo run registry:build",
-    "registry:validate": "turbo run registry:validate"
+    "registry:validate": "turbo run registry:validate",
+    "test": "turbo run test"
   },
   "devDependencies": {
     "turbo": "^2.10.3"

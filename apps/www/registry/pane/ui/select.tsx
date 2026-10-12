@@ -36,7 +36,7 @@ function SelectTrigger({
     <Pane
       variant="clear"
       radius={size === "sm" ? 12 : 14}
-      className="inline-flex w-fit has-[:disabled]:opacity-50 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--pane-highlight)]"
+      className="inline-flex w-fit has-[:disabled]:opacity-50 has-[:focus-visible]:ring-[3px] has-[:focus-visible]:ring-ring/50"
     >
       <SelectPrimitive.Trigger
         data-slot="select-trigger"

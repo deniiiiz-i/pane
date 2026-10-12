@@ -9,11 +9,12 @@ import { cn } from "@/lib/utils";
 const links = [
   { title: "Docs", href: "/docs" },
   { title: "Components", href: "/docs/components" },
+  { title: "Playground", href: "/playground" },
 ];
 
 /** Components owns its whole subtree; Docs owns the rest of /docs. */
 function isActive(href: string, pathname: string) {
-  if (href === "/docs/components") return pathname.startsWith(href);
+  if (href !== "/docs") return pathname.startsWith(href);
   return (
     pathname.startsWith("/docs") && !pathname.startsWith("/docs/components")
   );
@@ -23,7 +24,8 @@ export function HeaderNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex items-center gap-1 text-sm font-medium">
+    // below sm the links don't fit next to the buttons; the menu has them
+    <nav className="hidden items-center gap-1 font-medium text-sm sm:flex">
       {links.map((link) => {
         const active = isActive(link.href, pathname);
         return (

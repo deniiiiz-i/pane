@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { GLASS_DISPLACEMENT } from "./config";
+import { useGlassConfig } from "./context";
 import { buildDisplacementMap, resolveBand } from "./displacement";
 import type { GlassVariant } from "./types";
 
@@ -28,7 +28,7 @@ export function GlassFilter({
   height,
   radius,
 }: GlassFilterProps) {
-  const cfg = GLASS_DISPLACEMENT[variant];
+  const cfg = useGlassConfig().displacement[variant];
 
   /**
    * How much of the configured bevel this element can carry. Small controls get

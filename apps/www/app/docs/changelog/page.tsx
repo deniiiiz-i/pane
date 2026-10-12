@@ -34,23 +34,31 @@ async function getReleases(): Promise<Release[]> {
   // anonymous requests share a 60/hour limit per IP, which build machines
   // regularly exhaust; a token (no scopes needed for a public repo) lifts it
   const token = process.env.GITHUB_TOKEN;
-  const res = await fetch(`https://api.github.com/repos/${repo}/releases`, {
-    headers: {
-      Accept: "application/vnd.github+json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    next: { revalidate: 3600 },
-  });
-  if (!res.ok) {
-    // At build time a GitHub hiccup must not fail the deploy: ship an empty
-    // changelog and let the hourly revalidation fill it in. Later, throwing
-    // keeps the last good page instead of replacing it with an empty one.
+  // At build time a GitHub hiccup — an error status or no response at all —
+  // must not fail the deploy: ship an empty changelog and let the hourly
+  // revalidation fill it in. Later, throwing keeps the last good page instead
+  // of replacing it with an empty one.
+  const fail = (reason: string): Release[] => {
     if (process.env.NEXT_PHASE === "phase-production-build") {
-      console.warn(`Changelog: GitHub releases returned ${res.status}`);
+      console.warn(`Changelog: GitHub releases ${reason}`);
       return [];
     }
-    throw new Error(`GitHub releases: ${res.status}`);
+    throw new Error(`GitHub releases ${reason}`);
+  };
+
+  let res: Response;
+  try {
+    res = await fetch(`https://api.github.com/repos/${repo}/releases`, {
+      headers: {
+        Accept: "application/vnd.github+json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      next: { revalidate: 3600 },
+    });
+  } catch (error) {
+    return fail(`could not be reached: ${(error as Error).message}`);
   }
+  if (!res.ok) return fail(`returned ${res.status}`);
 
   const data: GitHubRelease[] = await res.json();
   return data
