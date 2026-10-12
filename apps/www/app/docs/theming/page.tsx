@@ -52,7 +52,7 @@ const groups: { title: string; tokens: Record<string, string> }[] = [
       "pane-border-width": "Width of the rim.",
       "pane-border-regular": "Rim color of regular glass.",
       "pane-border-clear": "Rim color of clear glass.",
-      "pane-highlight": "Rim arcs, the pointer glint and focus rings.",
+      "pane-highlight": "Rim arcs and the pointer glint.",
       "pane-shadow": "Drop shadow under every pane.",
     },
   },
@@ -176,7 +176,9 @@ export default function ThemingPage() {
           <code className={code}>components.json</code>, usually{" "}
           <code className={code}>app/globals.css</code>. Light values live on{" "}
           <code className={code}>:root</code>, and{" "}
-          <code className={code}>.dark</code> overrides them in dark mode.
+          <code className={code}>.dark</code> overrides them in dark mode. Focus
+          rings use your theme&apos;s <code className={code}>--ring</code>, as
+          shadcn/ui components do.
         </p>
 
         {allGroups.map((group) => (

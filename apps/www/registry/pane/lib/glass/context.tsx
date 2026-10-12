@@ -24,8 +24,10 @@ const defaultConfig: GlassConfig = {
 const GlassConfigContext = React.createContext<GlassConfig>(defaultConfig);
 
 type GlassConfigOverride = {
-  spring?: Partial<GlassConfig["spring"]>;
-  displacement?: Partial<GlassConfig["displacement"]>;
+  spring?: { [K in keyof GlassConfig["spring"]]?: Partial<GlassSpringConfig> };
+  displacement?: {
+    [K in GlassVariant]?: Partial<GlassDisplacementConfig>;
+  };
   specular?: Partial<GlassSpecularConfig>;
 };
 
@@ -45,8 +47,19 @@ export function GlassConfigProvider({
   const parent = React.useContext(GlassConfigContext);
   const merged = React.useMemo<GlassConfig>(
     () => ({
-      spring: { ...parent.spring, ...value.spring },
-      displacement: { ...parent.displacement, ...value.displacement },
+      // two levels deep: `press: { stiffness }` keeps press's damping and mass
+      spring: {
+        press: { ...parent.spring.press, ...value.spring?.press },
+        hover: { ...parent.spring.hover, ...value.spring?.hover },
+        drag: { ...parent.spring.drag, ...value.spring?.drag },
+      },
+      displacement: {
+        regular: {
+          ...parent.displacement.regular,
+          ...value.displacement?.regular,
+        },
+        clear: { ...parent.displacement.clear, ...value.displacement?.clear },
+      },
       specular: { ...parent.specular, ...value.specular },
     }),
     [parent, value],

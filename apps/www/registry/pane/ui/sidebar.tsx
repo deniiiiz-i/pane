@@ -575,7 +575,9 @@ function SidebarMenuButton({
   }
 
   return (
-    <Tooltip>
+    // zero delay on the tooltip itself: Tooltip brings its own provider, which
+    // would override the one SidebarProvider sets
+    <Tooltip delayDuration={0}>
       {/* asChild goes through a spread on purpose: shadcn's install
           transform for base-* styles drops a literal `asChild` attribute
           here, which would nest the menu button inside the trigger's own */}

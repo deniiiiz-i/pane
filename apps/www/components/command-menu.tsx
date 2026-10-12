@@ -21,7 +21,6 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { componentsMeta } from "@/lib/components-meta";
 import { docsNav } from "@/lib/site-config";
 
 const installCommand = (name: string) => `npx shadcn@latest add @pane/${name}`;
@@ -31,10 +30,14 @@ const installCommand = (name: string) => `npx shadcn@latest add @pane/${name}`;
  * extra (descriptions, prefixes) feeds its fuzzy match and drags unrelated
  * items above the one you typed. The footer maps the title back to a name.
  */
+// titles and links come from the nav: components-meta would pull every
+// demo into this bundle, which ships with the header on every page
+const components =
+  docsNav.find((group) => group.title === "Components")?.items ?? [];
 const componentByTitle = new Map(
-  componentsMeta.map((component) => [
-    component.title.toLowerCase(),
-    component.registryName,
+  components.map((item) => [
+    item.title.toLowerCase(),
+    item.href.split("/").pop() ?? "",
   ]),
 );
 
@@ -166,16 +169,14 @@ export function CommandMenu() {
             ))}
           </CommandGroup>
           <CommandGroup heading="Components">
-            {componentsMeta.map((component) => (
+            {components.map((item) => (
               <CommandItem
-                key={component.slug}
-                value={component.title}
-                onSelect={() =>
-                  run(() => router.push(`/docs/components/${component.slug}`))
-                }
+                key={item.href}
+                value={item.title}
+                onSelect={() => run(() => router.push(item.href))}
               >
                 <BlocksIcon />
-                {component.title}
+                {item.title}
               </CommandItem>
             ))}
           </CommandGroup>

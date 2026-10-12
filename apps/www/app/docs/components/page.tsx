@@ -46,7 +46,7 @@ export default function ComponentsPage() {
             <Link
               href={`/docs/components/${slug}`}
               aria-label={title}
-              className="absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+              className="absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:ring-inset"
             />
           </Pane>
         ))}

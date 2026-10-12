@@ -16,6 +16,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   GLASS_DISPLACEMENT,
+  GLASS_MIN_FILTER_AREA,
   GLASS_SPECULAR,
   GLASS_SPRING,
 } from "@/lib/glass/config";
@@ -101,7 +102,7 @@ function fromQuery(search: string, defaults: State): State {
     if (Number.isFinite(value)) next[key] = Math.min(max, Math.max(min, value));
   }
   const preset = params.get("preset");
-  if (preset && preset in presets) next.preset = preset as Preset;
+  if (preset && Object.hasOwn(presets, preset)) next.preset = preset as Preset;
   return next;
 }
 
@@ -294,6 +295,9 @@ export function Playground({ tokens }: { tokens: Tokens }) {
     `export const GLASS_SPECULAR = ${JSON.stringify(config.specular, null, 2)};`,
     "",
     `export const GLASS_SPRING = ${JSON.stringify(springs, null, 2)};`,
+    "",
+    // unchanged, but pane.tsx imports it: the file must keep exporting it
+    `export const GLASS_MIN_FILTER_AREA = ${GLASS_MIN_FILTER_AREA};`,
   ]
     .join("\n")
     .replace(/"(\w+)":/g, "$1:");
