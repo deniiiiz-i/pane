@@ -31,7 +31,8 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "text-foreground",
-        destructive: "text-red-600 dark:text-red-400",
+        prominent: "text-[var(--pane-accent-foreground)]",
+        destructive: "text-white",
       },
       size: {
         default: "h-9 px-4",
@@ -69,6 +70,12 @@ function Button({
         // keyboard only: `focus-within` leaves the ring painted around the pane
         // after every mouse click
         "has-[:focus-visible]:ring-[3px] has-[:focus-visible]:ring-ring/50 has-[:focus-visible]:ring-offset-0",
+        // filled variants: the glass takes the color, denser than a Switch so
+        // the label reads, but the rim and glint still show
+        variant === "prominent" &&
+          "[--pane-tint-clear:color-mix(in_oklab,var(--pane-accent)_92%,transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-accent)_92%,transparent)] [--pane-border-clear:var(--pane-border-accent)]",
+        variant === "destructive" &&
+          "[--pane-tint-clear:color-mix(in_oklab,var(--pane-destructive)_92%,transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-destructive)_92%,transparent)] [--pane-border-clear:var(--pane-border-accent)]",
       )}
     >
       <Comp

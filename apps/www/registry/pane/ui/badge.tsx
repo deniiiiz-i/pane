@@ -10,6 +10,8 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default: "text-foreground",
+        prominent: "text-[var(--pane-accent-foreground)]",
+        destructive: "text-white",
       },
     },
     defaultVariants: { variant: "default" },
@@ -30,7 +32,18 @@ function Badge({
 }: BadgeProps) {
   const Comp = asChild ? Slot.Root : "span";
   return (
-    <Pane variant="clear" radius={999} className="inline-flex w-fit shrink-0">
+    <Pane
+      variant="clear"
+      radius={999}
+      className={cn(
+        "inline-flex w-fit shrink-0",
+        // filled variants, the same fills as Button's
+        variant === "prominent" &&
+          "[--pane-tint-clear:color-mix(in_oklab,var(--pane-accent)_92%,transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-accent)_92%,transparent)] [--pane-border-clear:var(--pane-border-accent)]",
+        variant === "destructive" &&
+          "[--pane-tint-clear:color-mix(in_oklab,var(--pane-destructive)_92%,transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-destructive)_92%,transparent)] [--pane-border-clear:var(--pane-border-accent)]",
+      )}
+    >
       <Comp
         data-slot="badge"
         className={cn(badgeVariants({ variant, className }), "bg-transparent")}

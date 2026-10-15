@@ -70,7 +70,7 @@ function Slider({
         >
           <SliderPrimitive.Range
             data-slot="slider-range"
-            className="absolute bg-[var(--pane-tint-accent)] data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
+            className="absolute bg-[color-mix(in_oklab,var(--pane-accent)_var(--pane-accent-opacity),transparent)] data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
           />
         </SliderPrimitive.Track>
       </Pane>

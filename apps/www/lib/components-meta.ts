@@ -97,7 +97,8 @@ export function Example() {
   {
     slug: "button",
     title: "Button",
-    description: "A glass button with default and destructive variants.",
+    description:
+      "A glass button with default, prominent and destructive variants.",
     registryName: "button",
     demo: ButtonDemo,
     usage: `import { Button } from "@/components/ui/button";
@@ -108,9 +109,10 @@ export function Example() {
     props: [
       {
         name: "variant",
-        type: '"default" | "destructive"',
+        type: '"default" | "prominent" | "destructive"',
         default: '"default"',
-        description: "Visual emphasis.",
+        description:
+          "Visual emphasis. prominent fills the glass with --pane-accent for the main action, destructive with --pane-destructive.",
       },
       {
         name: "size",
@@ -176,6 +178,13 @@ export function Example() {
     registryName: "badge",
     demo: BadgeDemo,
     props: [
+      {
+        name: "variant",
+        type: '"default" | "prominent" | "destructive"',
+        default: '"default"',
+        description:
+          "prominent fills the glass with --pane-accent, destructive with --pane-destructive.",
+      },
       {
         name: "asChild",
         type: "boolean",
@@ -798,9 +807,10 @@ export function Example() {
     props: [
       {
         name: "variant",
-        type: '"default" | "destructive"',
+        type: '"default" | "prominent" | "destructive"',
         default: '"default"',
-        description: "Visual emphasis.",
+        description:
+          "Visual emphasis. prominent fills the glass with --pane-accent for the main action, destructive with --pane-destructive.",
       },
     ],
   },

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { CSSProperties } from "react";
+import { AccentPicker } from "@/components/docs/accent-picker";
 import { CodeBlock } from "@/components/docs/code-block";
 import { Pane } from "@/components/ui/pane";
+import { accentCss, accentNames } from "@/lib/accents";
 import {
   getGlassSource,
   getStyleCssVars,
@@ -57,10 +59,15 @@ const groups: { title: string; tokens: Record<string, string> }[] = [
     },
   },
   {
-    title: "Controls",
+    title: "Color",
     tokens: {
-      "pane-tint-accent": "Fill of an active Switch and the Slider range.",
-      "pane-border-accent": "Rim of a Switch that is on.",
+      "pane-accent":
+        "The brand color: prominent Buttons and Switch, Checkbox, Radio Group, Slider and Progress when on.",
+      "pane-accent-foreground": "Labels, checks and dots on the accent.",
+      "pane-accent-opacity":
+        "How much of the accent the controls mix into their glass.",
+      "pane-border-accent": "Rim of a control filled with a color.",
+      "pane-destructive": "Fill of a destructive Button.",
       "pane-knob": "Switch and Slider knob.",
     },
   },
@@ -124,7 +131,7 @@ function TokenValue({
   scheme: "light" | "dark";
   value: string;
 }) {
-  const isColor = value.startsWith("rgb") || value.startsWith("#");
+  const isColor = /^(rgb|#|oklch|hsl)/.test(value);
   return (
     <div className="flex items-center gap-2 font-mono text-xs">
       <span className="w-9 font-sans text-muted-foreground capitalize">
@@ -221,6 +228,28 @@ export default function ThemingPage() {
             <CodeBlock lang="css" code={getStyleCssVars()} />
           </div>
         </details>
+      </section>
+
+      <section className="flex flex-col gap-5">
+        <h2 className="text-xl font-semibold">Accent color</h2>
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          One color fills the prominent Button and every control that is on.
+          Pick one below and paste the two variables over the ones in your
+          stylesheet, or set them to any color:{" "}
+          <code className={code}>var(--primary)</code> and{" "}
+          <code className={code}>var(--primary-foreground)</code> follow your
+          shadcn/ui theme. Set them on an element instead of{" "}
+          <code className={code}>:root</code> to recolor just that part of the
+          page.
+        </p>
+        <AccentPicker
+          snippets={Object.fromEntries(
+            accentNames.map((name) => [
+              name,
+              <CodeBlock key={name} lang="css" code={accentCss(name)} />,
+            ]),
+          )}
+        />
       </section>
 
       <section className="flex flex-col gap-5">

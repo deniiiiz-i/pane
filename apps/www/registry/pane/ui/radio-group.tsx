@@ -29,8 +29,8 @@ function RadioGroupItem({
       className={cn(
         "inline-flex size-5 shrink-0 has-[:disabled]:opacity-50 has-[:focus-visible]:ring-[3px] has-[:focus-visible]:ring-ring/50",
         // Selected: the accent fills the glass, as in Checkbox and Switch
-        "has-[[data-state=checked]]:[--pane-tint-clear:var(--pane-tint-accent)]",
-        "has-[[data-state=checked]]:[--pane-nested-clear:var(--pane-tint-accent)]",
+        "has-[[data-state=checked]]:[--pane-tint-clear:color-mix(in_oklab,var(--pane-accent)_var(--pane-accent-opacity),transparent)]",
+        "has-[[data-state=checked]]:[--pane-nested-clear:color-mix(in_oklab,var(--pane-accent)_var(--pane-accent-opacity),transparent)]",
         "has-[[data-state=checked]]:[--pane-border-clear:var(--pane-border-accent)]",
       )}
     >
@@ -44,7 +44,7 @@ function RadioGroupItem({
       >
         <RadioGroupPrimitive.Indicator
           data-slot="radio-group-indicator"
-          className="size-2 rounded-full bg-[var(--pane-knob)]"
+          className="size-2 rounded-full bg-[var(--pane-accent-foreground)]"
         />
       </RadioGroupPrimitive.Item>
     </Pane>

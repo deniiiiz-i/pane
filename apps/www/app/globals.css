@@ -39,10 +39,16 @@
   --pane-border-regular: rgba(255, 255, 255, 0.85);
   --pane-border-clear: rgba(255, 255, 255, 0.6);
 
-  /* accent — system green for controls in their "on" state, kept translucent
-     so the material still refracts what sits behind it */
-  --pane-tint-accent: rgba(52, 199, 89, 0.82);
+  /* accent — the one brand color: controls in their "on" state and the
+     prominent Button. Components mix in --pane-accent-opacity themselves, so
+     the fill stays translucent and the material still refracts what sits
+     behind it. Set --pane-accent on any element to recolor just that part. */
+  --pane-accent: #34c759;
+  --pane-accent-foreground: #ffffff;
+  --pane-accent-opacity: 82%;
   --pane-border-accent: rgba(255, 255, 255, 0.7);
+  /* fill of a destructive Button — system red, with a white label */
+  --pane-destructive: #ff3b30;
   /* near-solid: the switch thumb has to stay readable over the green fill */
   --pane-knob: rgba(255, 255, 255, 0.92);
 
@@ -67,8 +73,11 @@
   --pane-border-regular: rgba(255, 255, 255, 0.14);
   --pane-border-clear: rgba(255, 255, 255, 0.1);
 
-  --pane-tint-accent: rgba(48, 209, 88, 0.75);
+  --pane-accent: #30d158;
+  --pane-accent-foreground: #ffffff;
+  --pane-accent-opacity: 75%;
   --pane-border-accent: rgba(255, 255, 255, 0.24);
+  --pane-destructive: #ff453a;
   --pane-knob: rgba(255, 255, 255, 0.95);
 
   --pane-highlight: rgba(255, 255, 255, 0.22);

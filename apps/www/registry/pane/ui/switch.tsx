@@ -17,12 +17,12 @@ function Switch({
         // the ring sits on the glass: the pane clips anything drawn outside
         // the switch inside it
         "inline-flex h-7 w-14 shrink-0 items-center has-[:focus-visible]:ring-[3px] has-[:focus-visible]:ring-ring/50",
-        // On: the track's glass fills with system green, rim included. Both
+        // On: the track's glass fills with the accent, rim included. Both
         // fill tokens are needed — a Pane reads `--pane-tint-*` normally but
         // `--pane-nested-*` inside another Pane, so setting only the first
         // leaves the switch grey in a card or dialog.
-        "has-[[data-state=checked]]:[--pane-tint-clear:var(--pane-tint-accent)]",
-        "has-[[data-state=checked]]:[--pane-nested-clear:var(--pane-tint-accent)]",
+        "has-[[data-state=checked]]:[--pane-tint-clear:color-mix(in_oklab,var(--pane-accent)_var(--pane-accent-opacity),transparent)]",
+        "has-[[data-state=checked]]:[--pane-nested-clear:color-mix(in_oklab,var(--pane-accent)_var(--pane-accent-opacity),transparent)]",
         "has-[[data-state=checked]]:[--pane-border-clear:var(--pane-border-accent)]",
       )}
     >

@@ -3,6 +3,11 @@
 import { CheckIcon, LinkIcon, PlusIcon, RotateCcwIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import * as React from "react";
+import {
+  AccentSwatches,
+  accentScopeClass,
+  accentScopeStyle,
+} from "@/components/accent-swatches";
 import { CopyButton } from "@/components/docs/copy-button";
 import { ShowcaseBackdrop } from "@/components/showcase-backdrop";
 import { Badge } from "@/components/ui/badge";
@@ -15,12 +20,19 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
+  type AccentName,
+  accents,
+  accentVars,
+  DEFAULT_ACCENT,
+} from "@/lib/accents";
+import {
   GLASS_DISPLACEMENT,
   GLASS_MIN_FILTER_AREA,
   GLASS_SPECULAR,
   GLASS_SPRING,
 } from "@/lib/glass/config";
 import { type GlassConfig, GlassConfigProvider } from "@/lib/glass/context";
+import { cn } from "@/lib/utils";
 
 type Tokens = Record<"light" | "dark", Record<string, string>>;
 
@@ -45,6 +57,7 @@ const initial = {
   aberration: 100,
   highlight: GLASS_SPECULAR.intensity,
   preset: "default" as Preset,
+  accent: DEFAULT_ACCENT as AccentName,
   stiffness: GLASS_SPRING.press.stiffness,
   damping: GLASS_SPRING.press.damping,
 };
@@ -66,7 +79,10 @@ const round = (value: number, digits = 2) =>
   Math.round(value * 10 ** digits) / 10 ** digits;
 
 /** Slider bounds, also used to clamp values read from a shared link. */
-const limits: Record<Exclude<keyof State, "preset">, [number, number]> = {
+const limits: Record<
+  Exclude<keyof State, "preset" | "accent">,
+  [number, number]
+> = {
   blur: [0, 40],
   tint: [0, 300],
   saturation: [1, 3],
@@ -103,6 +119,9 @@ function fromQuery(search: string, defaults: State): State {
   }
   const preset = params.get("preset");
   if (preset && Object.hasOwn(presets, preset)) next.preset = preset as Preset;
+  const accent = params.get("accent");
+  if (accent && Object.hasOwn(accents, accent))
+    next.accent = accent as AccentName;
   return next;
 }
 
@@ -278,13 +297,18 @@ export function Playground({ tokens }: { tokens: Tokens }) {
 
   const css = [
     ":root {",
-    ...Object.entries({ ...shared, ...cssFor(light) }).map(
-      ([k, v]) => `  --${k}: ${v};`,
-    ),
+    ...Object.entries({
+      ...shared,
+      ...cssFor(light),
+      ...accentVars(state.accent, "light"),
+    }).map(([k, v]) => `  --${k}: ${v};`),
     "}",
     "",
     ".dark {",
-    ...Object.entries(cssFor(dark)).map(([k, v]) => `  --${k}: ${v};`),
+    ...Object.entries({
+      ...cssFor(dark),
+      ...accentVars(state.accent, "dark"),
+    }).map(([k, v]) => `  --${k}: ${v};`),
     "}",
   ].join("\n");
 
@@ -303,7 +327,11 @@ export function Playground({ tokens }: { tokens: Tokens }) {
     .replace(/"(\w+)":/g, "$1:");
 
   return (
-    <div className="flex flex-col gap-10">
+    // the accent recolors the controls panel too, not just the preview
+    <div
+      style={accentScopeStyle(state.accent)}
+      className={cn("flex flex-col gap-10", accentScopeClass)}
+    >
       <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
         <ShowcaseBackdrop toggleKey="pane-playground-video">
           <GlassConfigProvider value={config}>
@@ -312,7 +340,7 @@ export function Playground({ tokens }: { tokens: Tokens }) {
               className="grid min-h-[30rem] place-content-center gap-8 p-4 sm:p-10"
             >
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <Button>Continue</Button>
+                <Button variant="prominent">Continue</Button>
                 <Button variant="destructive">Delete</Button>
                 <Button size="icon" aria-label="Add">
                   <PlusIcon />
@@ -430,6 +458,19 @@ export function Playground({ tokens }: { tokens: Tokens }) {
               aria-label="Highlight"
             />
           </Control>
+
+          <div className="flex flex-col gap-4 border-foreground/5 border-t pt-5">
+            <div className="flex items-center justify-between">
+              <h2 className="font-semibold">Accent</h2>
+              <span className="text-muted-foreground text-sm capitalize">
+                {state.accent}
+              </span>
+            </div>
+            <AccentSwatches
+              value={state.accent}
+              onValueChange={(name) => set("accent", name)}
+            />
+          </div>
 
           <div className="flex flex-col gap-5 border-foreground/5 border-t pt-5">
             <h2 className="font-semibold">Motion</h2>
