@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CodeBlock } from "@/components/docs/code-block";
 import { ComponentPreview } from "@/components/docs/component-preview";
+import { PageHeader } from "@/components/docs/page-header";
 import { PropsTable } from "@/components/docs/props-table";
 import { componentsMeta, getComponentMeta } from "@/lib/components-meta";
 
@@ -38,14 +39,9 @@ export default async function ComponentPage({
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-3">
-        <h1 className="text-4xl font-semibold tracking-tight">
-          {component.title}
-        </h1>
-        <p className="max-w-2xl text-lg text-muted-foreground">
-          {component.description}
-        </p>
-      </div>
+      <PageHeader slug={["components", slug]} title={component.title}>
+        {component.description}
+      </PageHeader>
 
       <ComponentPreview
         registryName={component.registryName}

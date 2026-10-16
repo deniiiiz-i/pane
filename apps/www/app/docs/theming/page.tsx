@@ -3,8 +3,10 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { AccentPicker } from "@/components/docs/accent-picker";
 import { CodeBlock } from "@/components/docs/code-block";
+import { PageHeader } from "@/components/docs/page-header";
 import { Pane } from "@/components/ui/pane";
 import { accentCss, accentNames } from "@/lib/accents";
+import { providerExample, tiers, tokenGroups } from "@/lib/docs-content";
 import {
   getGlassSource,
   getStyleCssVars,
@@ -18,97 +20,6 @@ export const metadata: Metadata = {
 };
 
 const code = "rounded bg-foreground/[0.06] px-1.5 py-0.5 text-foreground";
-
-// What each token does, grouped the way the material is built. Values come
-// from registry.json, so a token missing here still shows up under "Other".
-const groups: { title: string; tokens: Record<string, string> }[] = [
-  {
-    title: "Surface",
-    tokens: {
-      "pane-fg": "Text color on glass.",
-      "pane-tint-regular": "Body tint of regular glass.",
-      "pane-tint-clear": "Body tint of clear glass.",
-      "pane-blur-regular": "Backdrop blur behind regular glass.",
-      "pane-blur-clear": "Backdrop blur behind clear glass.",
-      "pane-saturation": "How much the backdrop's color is boosted.",
-    },
-  },
-  {
-    title: "Nested",
-    tokens: {
-      "pane-nested-regular":
-        "Flat tint for regular glass inside another pane, where glass can't stack.",
-      "pane-nested-clear": "Flat tint for clear glass inside another pane.",
-    },
-  },
-  {
-    title: "Overlay",
-    tokens: {
-      "pane-blur-overlay": "Blur of the denser Dialog and Sheet material.",
-      "pane-tint-overlay": "Tint of the denser Dialog and Sheet material.",
-    },
-  },
-  {
-    title: "Edge and light",
-    tokens: {
-      "pane-border-width": "Width of the rim.",
-      "pane-border-regular": "Rim color of regular glass.",
-      "pane-border-clear": "Rim color of clear glass.",
-      "pane-highlight": "Rim arcs and the pointer glint.",
-      "pane-shadow": "Drop shadow under every pane.",
-    },
-  },
-  {
-    title: "Color",
-    tokens: {
-      "pane-accent":
-        "The brand color: the default Button and Badge, and Switch, Checkbox, Radio Group, Slider and Progress when on.",
-      "pane-accent-foreground": "Labels, checks and dots on the accent.",
-      "pane-accent-opacity":
-        "How much of the accent the controls mix into their glass.",
-      "pane-accent-text":
-        "The accent as a label on plain glass, for tinted Buttons and Badges. A deeper shade, so it reads.",
-      "pane-border-accent": "Rim of a control filled with a color.",
-      "pane-destructive": "Fill of a destructive Button or Badge.",
-      "pane-destructive-text": "Label of a tinted destructive Button or Badge.",
-      "pane-tinted-opacity":
-        "How much color a tinted Button or Badge washes into its glass.",
-      "pane-knob": "Switch and Slider knob.",
-    },
-  },
-];
-
-const providerExample = `import { GlassConfigProvider } from "@/lib/glass/context";
-
-export function SnappyToolbar({ children }: { children: React.ReactNode }) {
-  return (
-    <GlassConfigProvider
-      value={{ spring: { press: { stiffness: 700, damping: 35 } } }}
-    >
-      {children}
-    </GlassConfigProvider>
-  );
-}`;
-
-const tiers = [
-  {
-    name: "full",
-    who: "Chrome, Edge and most Chromium browsers",
-    description:
-      "The complete effect: blur, saturation, edge refraction and chromatic aberration.",
-  },
-  {
-    name: "reduced",
-    who: "Safari, Firefox and everyone else",
-    description:
-      "Blur, saturation and the pointer-reactive highlight, without edge lensing.",
-  },
-  {
-    name: "none",
-    who: "No backdrop-filter, or reduced transparency",
-    description: "A flat translucent tint with no backdrop filtering.",
-  },
-];
 
 /**
  * Each value sits on its own theme's background, over a checkerboard so the
@@ -157,28 +68,25 @@ function TokenValue({
 
 export default function ThemingPage() {
   const { light, dark } = getStyleTokens();
-  const described = new Set(groups.flatMap((g) => Object.keys(g.tokens)));
+  const described = new Set(tokenGroups.flatMap((g) => Object.keys(g.tokens)));
   const other = Object.keys(light).filter((name) => !described.has(name));
   const allGroups = other.length
     ? [
-        ...groups,
+        ...tokenGroups,
         {
           title: "Other",
           tokens: Object.fromEntries(other.map((name) => [name, ""])),
         },
       ]
-    : groups;
+    : tokenGroups;
 
   return (
     <div className="flex flex-col gap-12">
-      <div className="flex flex-col gap-3">
-        <h1 className="text-4xl font-semibold tracking-tight">Theming</h1>
-        <p className="max-w-2xl text-lg text-muted-foreground">
-          The glass is driven by CSS variables and one config file. Change them
-          once and every component built on{" "}
-          <code className="text-foreground">{"<Pane>"}</code> follows.
-        </p>
-      </div>
+      <PageHeader slug={["theming"]} title="Theming">
+        The glass is driven by CSS variables and one config file. Change them
+        once and every component built on{" "}
+        <code className="text-foreground">{"<Pane>"}</code> follows.
+      </PageHeader>
 
       <section className="flex flex-col gap-5">
         <h2 className="text-xl font-semibold">Glass tokens</h2>
