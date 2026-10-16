@@ -9,6 +9,7 @@ export function CopyButton({ text }: { text: string }) {
 
   return (
     <Button
+      variant="secondary"
       size="icon"
       aria-label="Copy code"
       onClick={async () => {

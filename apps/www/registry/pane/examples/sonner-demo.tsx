@@ -7,6 +7,7 @@ export default function SonnerDemo() {
   return (
     <div className="flex flex-wrap items-center justify-center gap-3">
       <Button
+        variant="secondary"
         onClick={() =>
           toast("Event has been created", {
             description: "Sunday, December 3 at 9:00 AM",
@@ -16,7 +17,10 @@ export default function SonnerDemo() {
       >
         Show toast
       </Button>
-      <Button onClick={() => toast.success("Your changes have been saved")}>
+      <Button
+        variant="secondary"
+        onClick={() => toast.success("Your changes have been saved")}
+      >
         Success
       </Button>
       <Button

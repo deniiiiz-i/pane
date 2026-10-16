@@ -340,9 +340,9 @@ export function Playground({ tokens }: { tokens: Tokens }) {
               className="grid min-h-[30rem] place-content-center gap-8 p-4 sm:p-10"
             >
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <Button variant="prominent">Continue</Button>
+                <Button>Continue</Button>
                 <Button variant="destructive">Delete</Button>
-                <Button size="icon" aria-label="Add">
+                <Button variant="secondary" size="icon" aria-label="Add">
                   <PlusIcon />
                 </Button>
               </div>
@@ -384,11 +384,12 @@ export function Playground({ tokens }: { tokens: Tokens }) {
           <div className="flex items-center justify-between">
             <h2 className="font-semibold">Material</h2>
             <div className="flex items-center gap-2">
-              <Button size="sm" onClick={share}>
+              <Button variant="secondary" size="sm" onClick={share}>
                 {copied ? <CheckIcon /> : <LinkIcon />}
                 {copied ? "Copied" : "Share"}
               </Button>
               <Button
+                variant="secondary"
                 size="sm"
                 onClick={() => setState(defaults)}
                 aria-label="Reset all"

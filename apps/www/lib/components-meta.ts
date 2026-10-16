@@ -98,7 +98,7 @@ export function Example() {
     slug: "button",
     title: "Button",
     description:
-      "A glass button with default, prominent and destructive variants.",
+      "A glass button: filled with the accent by default, plain glass as secondary, red as destructive.",
     registryName: "button",
     demo: ButtonDemo,
     usage: `import { Button } from "@/components/ui/button";
@@ -109,14 +109,21 @@ export function Example() {
     props: [
       {
         name: "variant",
-        type: '"default" | "prominent" | "destructive"',
+        type: '"default" | "secondary" | "destructive"',
         default: '"default"',
         description:
-          "Visual emphasis. prominent fills the glass with --pane-accent for the main action, destructive with --pane-destructive.",
+          "default takes --pane-accent, destructive --pane-destructive, secondary is plain glass.",
+      },
+      {
+        name: "appearance",
+        type: '"filled" | "tinted"',
+        default: '"filled"',
+        description:
+          "filled fills the glass with the variant's color; tinted only washes it in and colors the label. No effect on secondary.",
       },
       {
         name: "size",
-        type: '"default" | "sm" | "lg" | "icon"',
+        type: '"default" | "xs" | "sm" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg"',
         default: '"default"',
         description: "Button size.",
       },
@@ -180,10 +187,17 @@ export function Example() {
     props: [
       {
         name: "variant",
-        type: '"default" | "prominent" | "destructive"',
+        type: '"default" | "secondary" | "destructive"',
         default: '"default"',
         description:
-          "prominent fills the glass with --pane-accent, destructive with --pane-destructive.",
+          "default takes --pane-accent, destructive --pane-destructive, secondary is plain glass.",
+      },
+      {
+        name: "appearance",
+        type: '"filled" | "tinted"',
+        default: '"filled"',
+        description:
+          "filled fills the glass with the variant's color; tinted only washes it in and colors the label. No effect on secondary.",
       },
       {
         name: "asChild",
@@ -321,7 +335,7 @@ export function Example() {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button>Hover me</Button>
+        <Button variant="secondary">Hover me</Button>
       </TooltipTrigger>
       <TooltipContent>Saved to your library</TooltipContent>
     </Tooltip>
@@ -371,7 +385,7 @@ export function Example() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Open dialog</Button>
+        <Button variant="secondary">Open dialog</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -425,7 +439,7 @@ export function Example() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button>Open sheet</Button>
+        <Button variant="secondary">Open sheet</Button>
       </SheetTrigger>
       <SheetContent side="right">
         <SheetHeader>
@@ -472,7 +486,7 @@ export function Example() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button>Share</Button>
+        <Button variant="secondary">Share</Button>
       </PopoverTrigger>
       <PopoverContent>Anyone with the link can view.</PopoverContent>
     </Popover>
@@ -502,7 +516,7 @@ export function Example() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button>Options</Button>
+        <Button variant="secondary">Options</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem>Rename</DropdownMenuItem>
@@ -807,10 +821,9 @@ export function Example() {
     props: [
       {
         name: "variant",
-        type: '"default" | "prominent" | "destructive"',
+        type: '"default" | "destructive"',
         default: '"default"',
-        description:
-          "Visual emphasis. prominent fills the glass with --pane-accent for the main action, destructive with --pane-destructive.",
+        description: "Visual emphasis.",
       },
     ],
   },

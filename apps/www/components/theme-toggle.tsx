@@ -25,6 +25,7 @@ export function ThemeToggle() {
 
   return (
     <Button
+      variant="secondary"
       size="icon"
       aria-label={`${active.label} theme. Switch to ${next.label}`}
       title={`${active.label} theme`}

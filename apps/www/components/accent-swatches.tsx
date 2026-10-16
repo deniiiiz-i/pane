@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
  * variables and the `.dark` class picks between them.
  */
 export const accentScopeClass =
-  "[--pane-accent:var(--accent-l)] [--pane-accent-foreground:var(--fg-l)] [.dark_&]:[--pane-accent:var(--accent-d)] [.dark_&]:[--pane-accent-foreground:var(--fg-d)]";
+  "[--pane-accent:var(--accent-l)] [--pane-accent-foreground:var(--fg-l)] [--pane-accent-text:var(--text-l)] [.dark_&]:[--pane-accent:var(--accent-d)] [.dark_&]:[--pane-accent-foreground:var(--fg-d)] [.dark_&]:[--pane-accent-text:var(--text-d)]";
 
 export function accentScopeStyle(name: AccentName) {
   const { light, dark } = accents[name];
@@ -19,6 +19,8 @@ export function accentScopeStyle(name: AccentName) {
     "--accent-d": dark.accent,
     "--fg-l": light.foreground,
     "--fg-d": dark.foreground,
+    "--text-l": light.text,
+    "--text-d": dark.text,
   } as React.CSSProperties;
 }
 

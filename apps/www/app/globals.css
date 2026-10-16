@@ -40,15 +40,21 @@
   --pane-border-clear: rgba(255, 255, 255, 0.6);
 
   /* accent — the one brand color: controls in their "on" state and the
-     prominent Button. Components mix in --pane-accent-opacity themselves, so
+     default Button. Components mix in --pane-accent-opacity themselves, so
      the fill stays translucent and the material still refracts what sits
      behind it. Set --pane-accent on any element to recolor just that part. */
   --pane-accent: #34c759;
   --pane-accent-foreground: #ffffff;
   --pane-accent-opacity: 82%;
+  /* a label in the accent on plain glass (appearance="tinted") — a deeper
+     shade, since the bright one doesn't read on light glass */
+  --pane-accent-text: #248a3d;
   --pane-border-accent: rgba(255, 255, 255, 0.7);
   /* fill of a destructive Button — system red, with a white label */
   --pane-destructive: #ff3b30;
+  --pane-destructive-text: #d70015;
+  /* how much color a tinted Button or Badge washes into the glass */
+  --pane-tinted-opacity: 16%;
   /* near-solid: the switch thumb has to stay readable over the green fill */
   --pane-knob: rgba(255, 255, 255, 0.92);
 
@@ -76,8 +82,11 @@
   --pane-accent: #30d158;
   --pane-accent-foreground: #ffffff;
   --pane-accent-opacity: 75%;
+  --pane-accent-text: #30db5b;
   --pane-border-accent: rgba(255, 255, 255, 0.24);
   --pane-destructive: #ff453a;
+  --pane-destructive-text: #ff6961;
+  --pane-tinted-opacity: 22%;
   --pane-knob: rgba(255, 255, 255, 0.95);
 
   --pane-highlight: rgba(255, 255, 255, 0.22);

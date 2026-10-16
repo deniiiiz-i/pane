@@ -13,7 +13,7 @@ export default function DialogDemo() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Open dialog</Button>
+        <Button variant="secondary">Open dialog</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -23,7 +23,7 @@ export default function DialogDemo() {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button>Cancel</Button>
+          <Button variant="secondary">Cancel</Button>
           <Button variant="destructive">Delete</Button>
         </DialogFooter>
       </DialogContent>

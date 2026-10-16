@@ -9,14 +9,53 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: "text-foreground",
-        prominent: "text-[var(--pane-accent-foreground)]",
-        destructive: "text-white",
+        default: "",
+        secondary: "text-foreground",
+        destructive: "",
+      },
+      appearance: {
+        filled: "",
+        tinted: "",
       },
     },
-    defaultVariants: { variant: "default" },
+    compoundVariants: [
+      {
+        variant: "default",
+        appearance: "filled",
+        className: "text-[var(--pane-accent-foreground)]",
+      },
+      {
+        variant: "default",
+        appearance: "tinted",
+        className: "text-[var(--pane-accent-text)]",
+      },
+      { variant: "destructive", appearance: "filled", className: "text-white" },
+      {
+        variant: "destructive",
+        appearance: "tinted",
+        className: "text-[var(--pane-destructive-text)]",
+      },
+    ],
+    defaultVariants: { variant: "default", appearance: "filled" },
   },
 );
+
+/** The same glass per variant as Button's. */
+const glassByVariant = {
+  default: {
+    filled:
+      "[--pane-tint-clear:color-mix(in_oklab,var(--pane-accent)_92%,transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-accent)_92%,transparent)] [--pane-border-clear:var(--pane-border-accent)]",
+    tinted:
+      "[--pane-tint-clear:color-mix(in_oklab,var(--pane-accent)_var(--pane-tinted-opacity),transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-accent)_var(--pane-tinted-opacity),transparent)]",
+  },
+  destructive: {
+    filled:
+      "[--pane-tint-clear:color-mix(in_oklab,var(--pane-destructive)_92%,transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-destructive)_92%,transparent)] [--pane-border-clear:var(--pane-border-accent)]",
+    tinted:
+      "[--pane-tint-clear:color-mix(in_oklab,var(--pane-destructive)_var(--pane-tinted-opacity),transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-destructive)_var(--pane-tinted-opacity),transparent)]",
+  },
+  secondary: { filled: "", tinted: "" },
+};
 
 export interface BadgeProps
   extends React.ComponentProps<"span">,
@@ -27,6 +66,7 @@ export interface BadgeProps
 function Badge({
   className,
   variant = "default",
+  appearance = "filled",
   asChild = false,
   ...props
 }: BadgeProps) {
@@ -37,16 +77,17 @@ function Badge({
       radius={999}
       className={cn(
         "inline-flex w-fit shrink-0",
-        // filled variants, the same fills as Button's
-        variant === "prominent" &&
-          "[--pane-tint-clear:color-mix(in_oklab,var(--pane-accent)_92%,transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-accent)_92%,transparent)] [--pane-border-clear:var(--pane-border-accent)]",
-        variant === "destructive" &&
-          "[--pane-tint-clear:color-mix(in_oklab,var(--pane-destructive)_92%,transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-destructive)_92%,transparent)] [--pane-border-clear:var(--pane-border-accent)]",
+        glassByVariant[variant ?? "default"][appearance ?? "filled"],
       )}
     >
       <Comp
         data-slot="badge"
-        className={cn(badgeVariants({ variant, className }), "bg-transparent")}
+        data-variant={variant}
+        data-appearance={appearance}
+        className={cn(
+          badgeVariants({ variant, appearance, className }),
+          "bg-transparent",
+        )}
         {...props}
       />
     </Pane>

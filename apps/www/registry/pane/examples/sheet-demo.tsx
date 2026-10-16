@@ -12,7 +12,7 @@ export default function SheetDemo() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button>Open sheet</Button>
+        <Button variant="secondary">Open sheet</Button>
       </SheetTrigger>
       <SheetContent side="right">
         <SheetHeader>

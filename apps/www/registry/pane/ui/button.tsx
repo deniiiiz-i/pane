@@ -8,9 +8,13 @@ const wrapperVariants = cva("inline-flex shrink-0", {
   variants: {
     size: {
       default: "",
+      xs: "",
       sm: "",
       lg: "",
       icon: "",
+      "icon-xs": "",
+      "icon-sm": "",
+      "icon-lg": "",
     },
   },
   defaultVariants: { size: "default" },
@@ -18,9 +22,13 @@ const wrapperVariants = cva("inline-flex shrink-0", {
 
 const radiusBySize: Record<string, number> = {
   default: 16,
+  xs: 11,
   sm: 13,
   lg: 20,
   icon: 16,
+  "icon-xs": 11,
+  "icon-sm": 13,
+  "icon-lg": 20,
 };
 
 const buttonVariants = cva(
@@ -30,20 +38,71 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "text-foreground",
-        prominent: "text-[var(--pane-accent-foreground)]",
-        destructive: "text-white",
+        default: "",
+        secondary: "text-foreground",
+        destructive: "",
+      },
+      appearance: {
+        filled: "",
+        tinted: "",
       },
       size: {
         default: "h-9 px-4",
+        xs: "h-7 gap-1 px-2.5 text-xs [&_svg]:size-3",
         sm: "h-8 px-3 text-xs",
         lg: "h-11 px-6 text-base",
         icon: "size-9 px-0",
+        "icon-xs": "size-7 px-0 [&_svg]:size-3",
+        "icon-sm": "size-8 px-0",
+        "icon-lg": "size-11 px-0",
       },
     },
-    defaultVariants: { variant: "default", size: "default" },
+    compoundVariants: [
+      {
+        variant: "default",
+        appearance: "filled",
+        className: "text-[var(--pane-accent-foreground)]",
+      },
+      {
+        variant: "default",
+        appearance: "tinted",
+        className: "text-[var(--pane-accent-text)]",
+      },
+      { variant: "destructive", appearance: "filled", className: "text-white" },
+      {
+        variant: "destructive",
+        appearance: "tinted",
+        className: "text-[var(--pane-destructive-text)]",
+      },
+    ],
+    defaultVariants: {
+      variant: "default",
+      appearance: "filled",
+      size: "default",
+    },
   },
 );
+
+/**
+ * What the glass itself does per variant. Filled is dense, so the label
+ * reads, but the rim and glint still show; tinted is a wash of the color
+ * with the label carrying it. Secondary is the plain material.
+ */
+const glassByVariant = {
+  default: {
+    filled:
+      "[--pane-tint-clear:color-mix(in_oklab,var(--pane-accent)_92%,transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-accent)_92%,transparent)] [--pane-border-clear:var(--pane-border-accent)]",
+    tinted:
+      "[--pane-tint-clear:color-mix(in_oklab,var(--pane-accent)_var(--pane-tinted-opacity),transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-accent)_var(--pane-tinted-opacity),transparent)]",
+  },
+  destructive: {
+    filled:
+      "[--pane-tint-clear:color-mix(in_oklab,var(--pane-destructive)_92%,transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-destructive)_92%,transparent)] [--pane-border-clear:var(--pane-border-accent)]",
+    tinted:
+      "[--pane-tint-clear:color-mix(in_oklab,var(--pane-destructive)_var(--pane-tinted-opacity),transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-destructive)_var(--pane-tinted-opacity),transparent)]",
+  },
+  secondary: { filled: "", tinted: "" },
+};
 
 export interface ButtonProps
   extends React.ComponentProps<"button">,
@@ -54,6 +113,7 @@ export interface ButtonProps
 function Button({
   className,
   variant = "default",
+  appearance = "filled",
   size = "default",
   asChild = false,
   ...props
@@ -70,20 +130,16 @@ function Button({
         // keyboard only: `focus-within` leaves the ring painted around the pane
         // after every mouse click
         "has-[:focus-visible]:ring-[3px] has-[:focus-visible]:ring-ring/50 has-[:focus-visible]:ring-offset-0",
-        // filled variants: the glass takes the color, denser than a Switch so
-        // the label reads, but the rim and glint still show
-        variant === "prominent" &&
-          "[--pane-tint-clear:color-mix(in_oklab,var(--pane-accent)_92%,transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-accent)_92%,transparent)] [--pane-border-clear:var(--pane-border-accent)]",
-        variant === "destructive" &&
-          "[--pane-tint-clear:color-mix(in_oklab,var(--pane-destructive)_92%,transparent)] [--pane-nested-clear:color-mix(in_oklab,var(--pane-destructive)_92%,transparent)] [--pane-border-clear:var(--pane-border-accent)]",
+        glassByVariant[variant ?? "default"][appearance ?? "filled"],
       )}
     >
       <Comp
         data-slot="button"
         data-variant={variant}
+        data-appearance={appearance}
         data-size={size}
         className={cn(
-          buttonVariants({ variant, size, className }),
+          buttonVariants({ variant, appearance, size, className }),
           "bg-transparent",
         )}
         {...props}

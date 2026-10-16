@@ -62,12 +62,17 @@ const groups: { title: string; tokens: Record<string, string> }[] = [
     title: "Color",
     tokens: {
       "pane-accent":
-        "The brand color: prominent Buttons and Switch, Checkbox, Radio Group, Slider and Progress when on.",
+        "The brand color: the default Button and Badge, and Switch, Checkbox, Radio Group, Slider and Progress when on.",
       "pane-accent-foreground": "Labels, checks and dots on the accent.",
       "pane-accent-opacity":
         "How much of the accent the controls mix into their glass.",
+      "pane-accent-text":
+        "The accent as a label on plain glass, for tinted Buttons and Badges. A deeper shade, so it reads.",
       "pane-border-accent": "Rim of a control filled with a color.",
-      "pane-destructive": "Fill of a destructive Button.",
+      "pane-destructive": "Fill of a destructive Button or Badge.",
+      "pane-destructive-text": "Label of a tinted destructive Button or Badge.",
+      "pane-tinted-opacity":
+        "How much color a tinted Button or Badge washes into its glass.",
       "pane-knob": "Switch and Slider knob.",
     },
   },
@@ -233,12 +238,13 @@ export default function ThemingPage() {
       <section className="flex flex-col gap-5">
         <h2 className="text-xl font-semibold">Accent color</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          One color fills the prominent Button and every control that is on.
-          Pick one below and paste the two variables over the ones in your
-          stylesheet, or set them to any color:{" "}
-          <code className={code}>var(--primary)</code> and{" "}
-          <code className={code}>var(--primary-foreground)</code> follow your
-          shadcn/ui theme. Set them on an element instead of{" "}
+          One color fills the default Button and every control that is on. Pick
+          one below and paste the variables over the ones in your stylesheet, or
+          set them to any color: <code className={code}>var(--primary)</code>{" "}
+          and <code className={code}>var(--primary-foreground)</code> follow
+          your shadcn/ui theme. <code className={code}>--pane-accent-text</code>{" "}
+          is a deeper shade for labels on plain glass, so the bright accent
+          still reads as text. Set them on an element instead of{" "}
           <code className={code}>:root</code> to recolor just that part of the
           page.
         </p>

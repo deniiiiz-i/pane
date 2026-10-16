@@ -285,6 +285,7 @@ function SidebarTrigger({
 
   return (
     <Button
+      variant="secondary"
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       size="icon"
